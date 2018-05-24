@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script src="../js/3list.js"></script>
+<script>
+    window.onload = function () {
+        var names = new List();
+        names.append("Clayton");
+        names.append("Raymond");
+        names.append("Cynthia");
+        names.append("Jennifer");
+        names.append("Bryan");
+        names.append("Danny");
+
+        // names.front();
+        console.log(names.getElement()); // 显示 Clayton
+
+        names.next();
+        console.log(names.getElement()); // 显示 Raymond
+
+        names.next();
+        names.next();
+        names.prev();
+        console.log(names.getElement()); // 显示 Cynthia
+
+        //从前遍历
+        for (names.front(); names.currPos() < names.length() - 1; names.next()) {
+            console.log(names.currPos())
+            console.log(names.getElement());
+        }
+
+        //从后遍历
+        for (names.end(); names.currPos() > 0; names.prev()) {
+            console.log(names.getElement());
+        }
+    }
+</script>
+</body>
+</html>
