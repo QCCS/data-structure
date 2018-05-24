@@ -180,25 +180,3 @@ function BST() {
 }
 
 
-//测试
-var nums = new BST();
-nums.insert(23);
-nums.insert(45);
-nums.insert(16);
-nums.insert(37);
-nums.insert(3);
-nums.insert(99);
-nums.insert(22);
-nums.insert(3);
-nums.insert(22);
-nums.insert(3);
-// nums.inOrder(nums.root);
-// nums.preOrder(nums.root);
-// nums.postOrder(nums.root);
-// console.log(nums.getmin());
-// console.log(nums.getmax());
-console.log(nums.find(3));
-// nums.remove(3);
-// nums.inOrder(nums.root);
-
-// console.log(nums.getSmallest(nums.find(3)))
