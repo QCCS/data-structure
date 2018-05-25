@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Queue</title>
+</head>
+<body>
+
+<script src="../js/5queue.js"></script>
+<script>
+    window.onload = function () {
+        var q = new Queue();
+        q.enqueue("Meredith");
+        q.enqueue("Cynthia");
+        q.enqueue("Jennifer");
+        console.log(q.toString());
+        q.dequeue();
+        console.log(q.toString());
+        console.log("Front of queue: " + q.front());
+        console.log("Back of queue: " + q.back());
+    }
+</script>
+</body>
+</html>
