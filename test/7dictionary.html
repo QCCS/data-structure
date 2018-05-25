@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dictionary</title>
+</head>
+<body>
+
+<script src="../js/7dictionary.js"></script>
+<script>
+    window.onload = function () {
+        var pbook = new Dictionary();
+        pbook.add("Mike","123");
+        pbook.add("David", "345");
+        pbook.add("Cynthia", "456");
+        console.log(pbook.count());
+        console.log("David's extension: " + pbook.find("David"));
+        pbook.remove("David");
+        pbook.showAll();
+    }
+</script>
+</body>
+</html>
