@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LList</title>
+</head>
+<body>
+
+<script src="../js/6llist.js"></script>
+<script>
+    window.onload = function () {
+        //单向链表
+        var cities = new LList();
+        cities.insert("Conway", "head");
+        cities.insert("Russellville", "Conway");
+        cities.insert("Carlisle", "Russellville");
+        cities.insert("Alma", "Carlisle");
+        cities.display();
+        console.log();
+        cities.remove("Carlisle");
+        cities.display();
+
+
+        //双向链表
+        var cities2 = new LList2();
+        cities2.insert("Conway", "head");
+        cities2.insert("Russellville", "Conway");
+        cities2.insert("Carlisle", "Russellville");
+        cities2.insert("Alma", "Carlisle");
+        cities2.display();
+        console.log();
+        cities2.remove("Carlisle");
+        cities2.display();
+        console.log();
+        cities2.dispReverse();
+    }
+</script>
+</body>
+</html>
