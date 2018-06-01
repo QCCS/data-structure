@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hashtable</title>
+</head>
+<body>
+
+<script src="../js/8hashtable.js"></script>
+<script>
+    window.onload = function () {
+        // test SimpleHashTable
+        console.log("test SimpleHashTable");
+        var someNames = ["David", "Jennifer", "Donnie", "Raymond", "Cynthia", "Mike", "Clayton", "Danny", "Jonathan"];
+        var hTable = new SimpleHashTable();
+        for (var i = 0; i < someNames.length; ++i) {
+            hTable.put(someNames[i]);
+        }
+        hTable.showDistro();
+
+
+        // test BetterHashTable
+        console.log("test BetterHashTable");
+
+        var someNames1 = ["David", "Jennifer", "Donnie", "Raymond", "Cynthia", "Mike", "Clayton", "Danny", "Jonathan"];
+        var hTable1 = new BetterHashTable();
+        for (var i = 0; i < someNames1.length; ++i) {
+            hTable1.put(someNames1[i]);
+        }
+        hTable1.showDistro();
+
+
+        // test HashTableWithGet
+        console.log("test HashTableWithGet");
+        var someNames2 = ["David", "Jennifer", "Donnie", "Raymond", "Cynthia", "Mike", "Clayton", "Danny", "Jonathan"];
+        var hTable2 = new HashTableWithGet();
+        for (var i = 0; i < someNames2.length; ++i) {
+            hTable2.put(someNames2[i], someNames2[i]);
+        }
+        hTable2.showDistro();
+        hTable2.get(someNames2[0]);
+    }
+</script>
+</body>
+</html>
