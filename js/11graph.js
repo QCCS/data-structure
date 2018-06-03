@@ -63,24 +63,32 @@ function Dictionary() {
         return items;
     };
 }
+//图
+//本质上顶点与点的关系
 function Graph() {
+    //存储顶点
     var vertices = [];
+    //每个顶点对应的其他顶点
     var adjList = new Dictionary();
 
+    //添加顶点
     this.addVertex = function (v) {
         vertices.push(v);
         adjList.set(v, []);
     };
 
+    //添加顶点链接的其他顶点
     this.addEdge = function (v, w) {
         adjList.get(v).push(w);
         adjList.get(w).push(v);
     };
 
+    //获取图的顶点与顶点的关系
     this.getAdjList = function () {
         return adjList.getItems();
     };
 
+    //初始化顶点颜色
     var initializeColor = function () {
         var color = {};
         for (var i = 0; i < vertices.length; i++) {
@@ -89,17 +97,23 @@ function Graph() {
         return color;
     };
 
+    //广度优先，遍历依靠队列，把遍历过的点点加入队列，挨个取出遍历点点相连的顶点
+    //遍历依靠队列，把遍历过的点点加入队列，挨个取出遍历点点相连的顶点,,由于总数遍历挨着的点点，所有在一层顶点没有遍历
+    //完的时候，用于不会遍历下一层，就形成了广度优先
     this.bfs = function (v, callback) {
-        var color = initializeColor(),
-            queue = new Queue();
+        var color = initializeColor();
+        var queue = new Queue();
 
+        //入队，标记黑色
         queue.enqueue(v);
         color[v] = 'black';
 
         while (!queue.isEmpty()) {
-            var u = queue.dequeue(),
-                neighbors = adjList.get(u);
+            var u = queue.dequeue();
+            //找到相连顶点
+            var neighbors = adjList.get(u);
 
+            //相邻顶点标记为黑色，代表遍历过
             for (var i = 0; i < neighbors.length; i++) {
                 var w = neighbors[i];
                 if (color[w] === 'white') {
@@ -108,17 +122,19 @@ function Graph() {
                 }
             }
 
+            //遍历的点放进回调函数中
             if (callback) {
                 callback(u);
             }
         }
     };
 
+    //广度优先遍历：求出到各个顶点的距离
     this.BFS = function (v) {
-        var color = initializeColor(),
-            queue = new Queue(),
-            d = {},
-            pred = {};
+        var color = initializeColor();
+        var queue = new Queue();
+        var d = {};
+        var pred = {};
 
         queue.enqueue(v);
 
@@ -128,8 +144,8 @@ function Graph() {
         }
 
         while (!queue.isEmpty()) {
-            var u = queue.dequeue(),
-                neighbors = adjList.get(u);
+            var u = queue.dequeue();
+            var neighbors = adjList.get(u);
             color[v] = 'black';
             for (i = 0; i < neighbors.length; i++) {
                 var w = neighbors[i];
@@ -149,11 +165,13 @@ function Graph() {
         };
     };
 
+    //深度优先遍历
     this.dfs = function (v, callback) {
         var color = initializeColor();
         dfsVisit(v, color, callback);
     };
 
+    //深度优先遍历，采用递归，凡是相连节点，没有标记的就继续递归，形成深度遍历
     var dfsVisit = function (u, color, callback) {
         if (callback) {
             callback(u);
@@ -170,10 +188,10 @@ function Graph() {
 
     var time = 0;
     this.DFS = function () {
-        var color = initializeColor(),
-            d = {},
-            f = {},
-            p = {};
+        var color = initializeColor();
+        var d = {};
+        var f = {};
+        var p = {};
         time = 0;
 
         for (var i = 0; i < vertices.length; i++) {

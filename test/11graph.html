@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BST</title>
+    <title>graph</title>
 </head>
 <body>
 
@@ -11,12 +11,15 @@
 <script src="../js/11graph.js"></script>
 <script>
     window.onload = function () {
+        //实例一个图
         var graph = new Graph();
 
+        //顶点
         var myVertices = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
         for (var i = 0; i < myVertices.length; i++) {
             graph.addVertex(myVertices[i]);
         }
+        //添加顶点之间的关系
         graph.addEdge('A', 'B');
         graph.addEdge('A', 'C');
         graph.addEdge('A', 'D');
@@ -27,23 +30,29 @@
         graph.addEdge('B', 'E');
         graph.addEdge('B', 'F');
         graph.addEdge('E', 'I');
-        var a = graph.getAdjList();
-        console.log(a)
+        var relation = graph.getAdjList();
+        console.log("图的顶点关系");
+        console.log(relation);
 
-//广度优先
+        //广度优先
         var bfsList = [];
         graph.bfs(myVertices[0], function (u) {
             bfsList.push(u);
         });
-        var p = graph.BFS(myVertices[0]);
+        console.log("广度优先遍历顺序");
+        console.log(bfsList);
 
+        var p = graph.BFS(myVertices[0]);
+        console.log("广度优先遍历各个点的距离");
         console.log(p);
-//深度优先
+
+
+        //深度优先
         var dfsList = [];
         graph.dfs(myVertices[0], function (u) {
             dfsList.push(u);
         });
-
+        console.log("深度优先遍历顺序");
         console.log(dfsList);
         var p1 = graph.DFS();
         console.log(p1);
