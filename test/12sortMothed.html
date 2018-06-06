@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>graph</title>
+</head>
+<body>
+
+</body>
+
+<script src="../js/12sortMothed.js"></script>
+<script>
+    window.onload = function () {
+
+        var numElements = 100;
+        var myNums = new CArray(numElements);
+        myNums.setData();
+        // myNums.bubbleSort();
+        // myNums.selectionSort();
+        // myNums.insertionSort();
+        // myNums.shellsort();
+        // myNums.shellsort1();
+        console.log(myNums.qSort());
+        console.log(myNums.toString());
+
+
+
+        var nums = [6,10,1,9,4,8,2,7,3,5];
+        console.log();
+        myNums.mergeSort();
+        console.log();
+        console.log(myNums.toString());
+
+    }
+</script>
+</html>
