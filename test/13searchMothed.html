@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Mothed</title>
+</head>
+<body>
+
+</body>
+
+<script src="../js/13searchMothed.js"></script>
+<script>
+    window.onload = function () {
+        var nums = [];
+        for (var i = 0; i < 110; ++i) {
+            nums[i] = Math.floor(Math.random() * 10);
+        }
+        insertionsort(nums);
+        console.log(nums);
+        console.log();
+        var val = 1;
+        //计算重复出现次数
+        var retVal = count(nums, val);
+        console.log( val + " 重复次数 " + retVal);
+    }
+</script>
+</html>

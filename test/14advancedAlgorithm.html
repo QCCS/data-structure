@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Advanced Algorithm</title>
+</head>
+<body>
+
+</body>
+
+<script src="../js/14advancedAlgorithm.js"></script>
+<script>
+    window.onload = function () {
+
+// -------
+        var start = new Date().getTime();
+        console.log(recurFib(10));
+        var stop = new Date().getTime();
+        console.log("recursive time - " + (stop - start) + "milliseconds");
+        console.log();
+        start = new Date().getTime();
+        console.log(dynFib(10));
+        stop = new Date().getTime();
+        console.log("dynamic programming time - " + (stop - start) + " milliseconds");
+// -------
+        var t = lcs("bbac", "aaaacccc");
+        console.log(t);
+// -------
+        var value = [4, 5, 10, 11, 13];
+        var size = [3, 4, 7, 8, 9];
+        var capacity = 16;
+        var n = 5;
+        console.log(knapsack(capacity, size, value, n));
+// -------
+        var value = [4, 5, 10, 11, 13];
+        var size = [3, 4, 7, 8, 9];
+        var capacity = 16;
+        var n = 5;
+        console.log(dKnapsack(capacity, size, value, n));
+// -------
+
+        var origAmt = .63;
+        var coins = [];
+        makeChange(origAmt, coins);
+        showChange(coins);
+    }
+</script>
+</html>
