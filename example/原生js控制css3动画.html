@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="../vendor/jquery-1.11.2.min.js"></script>
+    <script src="../vendor/jquery.easie.js"></script>
+    <!--/*缓动函数*/-->
+    <script src="../vendor/jquery.path.js"></script>
+    <!--曲线运动-->
+    <style>
+        * {
+            margin: 0px;
+        }
+        .animate {
+            width: 20px;
+            height: 20px;
+            background: red;
+            position: absolute;
+
+        }
+
+        .div1 {
+            top: 10px;
+        }
+
+        .div2 {
+            top: 30px;
+        }
+
+        .div3 {
+            top: 50px;
+        }
+
+        .div4 {
+            top: 70px;
+            left: 0px;
+            transition: left 2s;
+        }
+
+        .div4:hover {
+            top: 80px;
+            left: 400px;
+
+        }
+
+        .div5 {
+            top: 90px;
+        }
+
+        .div6 {
+            top: 110px;
+            border-radius: 10px;
+        }
+
+        .div7 {
+            top: 130px;
+        }
+    </style>
+</head>
+<body>
+<div class="div1 animate">1</div>
+<div class="div2 animate">2</div>
+<div class="div3 animate">3</div>
+<div class="div4 animate">4</div>
+<div class="div5 animate">5</div>
+<div class="div6 animate">6</div>
+<div class="div7 animate">7</div>
+</body>
+</html>
+<script>
+    window.onload = function () {
+        var animate = document.getElementsByClassName("animate");
+        //这个animate需要引入jquery才能用，
+        $(".div1").animate({"left": 400}, 300);
+        $(".div2").animate({"left": 400}, 300, "linear");
+        $(".div3").animate({"left": 400}, $.easie(0, 1, 1, 0.017));
+        //在不用插件的情况下，缓动函数只定义了几种，需要引入一个插件，就可以随便定义了
+
+        //让div沿着曲线运动，也需要一个path插件
+        //用这个插件分为两部分。第一：定义一条曲线，第二：使用曲线
+        //下面定义一个圆周运动
+        var arc1 = {
+            center: [285, 185],//圆心
+            radius: 100,//半径
+            start: 30,//起始角度
+            end: 200,
+            dir: -1//顺时针
+        }
+        var arc2 = {
+            center: [285, 285],//圆心
+            radius: 100,//半径
+            start: 0,//起始角度
+            end: 360,
+            dir: 1//顺时针
+        }
+        $(".div5").animate({path: new $.path.arc(arc1)}, 1000);//第二个参数表示运动时间
+        //如果要div无休止的运动，可以用一个回调函数解决
+        run();
+
+        function run() {
+            $(".div6").animate({path: new $.path.arc(arc2)}, 3000, "linear", function () {
+                run();//回调函数，造成无休止的运动
+            });
+        }
+
+        //下面定义一个曲线运动
+        var bezier_params = {
+            start: {
+                x: 185,
+                y: 185,
+                angle: 10
+            },
+            end: {
+                x: 540,
+                y: 110,
+                angle: -10,
+                length: 0.25
+            }
+        }
+
+        $(".div7").animate({path: new $.path.bezier(bezier_params)})
+    }
+</script>

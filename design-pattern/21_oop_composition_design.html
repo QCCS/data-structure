@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+</html>
+<script>
+	//为创建动态用户界面，量身定制的模式
+//	场景模拟
+//	-》公司
+//	 =》财务部门
+//	 	-》张三
+//	 	-》张二
+//	 	-》张一
+//	 =》销售部门
+//	 	-》张四
+//	 	-》张流
+//	 	
+	
+//	var org=function(name){//公司
+//		this.name=name;
+//		this.depts=[];//放部门
+//	}
+//	org.prototype={
+//		constructor:org,
+//		add_depts:function(child){
+//			this.depts.push(child);
+//			return this;
+//		},
+//		get_depts:function(){
+//			return this.depts;
+//		}
+//	}
+//	
+//	var dept=function(name){//部门
+//		this.name=name;
+//		this.persons=[];//放员工
+//	}
+//	dept.prototype={
+//		constructor:dept,
+//		add_persons:function(child){
+//			this.persons.push(child);
+//			return this;
+//		},
+//		get_persons:function(){
+//			return this.persons;
+//		}
+//	}
+//	
+//	var person=function(name){//员工
+//		this.name=name;
+//	}
+//	person.prototype={
+//		constructor:person,
+//		hard_working:function(){
+//			console.log(this.name+"正在工作");
+//		},
+//		sleeping:function(){
+//			console.log(this.name+"正在睡觉");
+//		}
+//	}
+//	
+//	var p1=new person("z1");
+//	var p2=new person("z2");
+//	var p3=new person("z3");
+//	var p4=new person("z4");
+//	var p5=new person("z5");
+//	var p6=new person("z6");
+//	
+//	var ad1=new dept("开发");
+//	ad1.add_persons(p1).add_persons(p2).add_persons(p3);
+//	var ad2=new dept("销售");
+//	ad2.add_persons(p4).add_persons(p5).add_persons(p6);
+//	
+//	
+//	var org1=new org("orimuse");
+//	org1.add_depts(ad1).add_depts(ad2);
+//	
+//	
+//	//让一个人工作
+//	//继续遍历每一个部门
+//	for(var i=0;i<org1.get_depts().length;i++){
+//		//继续遍历每一个人
+//		for(var j=0;j<org1.get_depts()[i].get_persons().length;j++){
+//			if(org1.get_depts()[i].get_persons()[j].name==="z1"){
+//				org1.get_depts()[i].get_persons()[j].hard_working();
+//			}
+//		}
+//	}
+	//这种方式，当公司集体太大，就得多层for循环，效率低下
+	//需要实现
+	//org.hard_working(name);name所指定的部门与人就努力工作
+	//==================================================================
+		//实现多维数组的遍历，在原型上继承
+		Array.prototype.each=function(fn){
+			try{
+				//this代表数组，this.i如果存在就ok，没有就初始化
+				this.i||(this.i=0);
+				if(this.length>0&&fn.constructor==Function){//如果对象是数组，且参数为函数
+					while(this.i<this.length){//下面正式开始，核心
+						var e=this[this.i];
+						if(e&&e.constructor==Array){//一旦发现数组里面的元素是数组，就递归
+							e.each(fn);
+						}else{
+					        //调用函数打印e
+							 fn.call(e,e);//本函数调用（代替本函数，参数e）
+							//第一个参数只是冒充对象，第二个参数是要实际打印
+							//fn.call(aaaaa,e);//aaaaa上面已经定义，这里测试
+							//fn(e);这样也可以，fn()=fn.call(obj,[]),obj必须定义，有时候，并没有其他意义
+						}
+						this.i++;
+					}
+					this.i=null;
+				}
+			}
+			catch(ex){
+				
+			}
+			return this;
+		}
+	//组合模式：
+	//应用场景，存在一批组织成某种层次体系的对象
+	//希望对这批对象或其中的某一部分对象实施操作
+	//两种对象：组合对象-叶子对象
+	var composite=function(name){//组合对象
+		this.name=name;
+		this.type="composite";//对象类型
+		this.child=[];//盛装孩子的容器
+	}
+	composite.prototype={//实现统一的接口
+		constructor:composite,
+		add_child:function(child){
+			this.child.push(child);
+			return this;//链式编程
+		},
+		get_child:function(name){
+			var elements=[];
+			//判断对象是否为leaf类型，如果是就加入elements数组中
+			var push_leaf=function(item){
+					 if(item.type==='composite'){
+						 	item.child.each(arguments.callee);
+						 }else if(item.type==='leaf'){
+						 	elements.push(item);
+						 }
+			};
+			if(name&&this.name!==name){//如果是子级
+		         this.child.each(function(item){
+		         	//如果是二级节点
+		         	if(item.name===name&&item.type==="composite"){
+		         		item.child.each(push_leaf);
+		         	}
+		         	//如果是n级节点
+		         	if(item.name!==name&&item.type==="composite"){
+		         		item.child.each(arguments.callee);
+		         	}
+		         	//如果是叶子节点
+		         	if(item.name===name&&item.type==="leaf"){
+		         		elements.push(item);
+		         	}
+		         });
+			}else{//如果是大终极节点
+				 this.child.each(push_leaf);
+			}
+			return elements;
+		},
+		hard_working:function(name){
+			var leaf_obj=this.get_child(name);
+			for(var i=0;i<leaf_obj.length;i++){
+				leaf_obj[i].hard_working();
+			}
+		},
+		sleeping:function(name){
+			var leaf_obj=this.get_child(name);
+			for(var i=0;i<leaf_obj.length;i++){
+				leaf_obj[i].sleeping();
+			}
+		}
+	}
+	var leaf=function(name){//叶子镀锡
+		this.name=name;
+		this.type="leaf";
+	}
+	leaf.prototype={
+		constructor:leaf,
+		add_child:function(child){
+			throw new Error("this method is desable");//叶子对象不能添加孩子了；
+		},
+		get_child:function(name){
+			if(this.name==name){
+				return this;
+			}
+			return null;
+		},
+		hard_working:function(name){
+			console.log(this.name+"正在工作");
+		},
+		sleeping:function(name){
+			console.log(this.name+"正在睡觉");
+		}
+	}
+	
+	
+	
+	//测试数据
+	var p1=new leaf("z1");
+	var p2=new leaf("z2");
+	var p3=new leaf("z3");
+	var p4=new leaf("z4");
+	var p5=new leaf("z5");
+	var p6=new leaf("z6");
+	
+	var p7=new leaf("z7");
+	var p8=new leaf("z8");
+	var p9=new leaf("z9");
+	var p10=new leaf("z10");
+	var p11=new leaf("z11");
+	var p12=new leaf("z12");
+	
+	//北京部门
+	var ad1=new composite("beijin开发");
+	ad1.add_child(p1).add_child(p2).add_child(p3);
+	var ad2=new composite("beijin销售");
+	ad2.add_child(p4).add_child(p5).add_child(p6);
+	
+	//上海部门
+	var ad3=new composite("shanghai开发");
+	ad3.add_child(p7).add_child(p8).add_child(p9);
+	var ad4=new composite("shanghai销售");
+	ad4.add_child(p10).add_child(p11).add_child(p12);
+	
+	//北京公司
+	var org1=new composite("orimuse");
+	org1.add_child(ad1).add_child(ad2);
+	//上海公司
+	var org2=new composite("orimuse_shang");
+	org2.add_child(ad3).add_child(ad4);
+	
+	//总公司
+	var org=new composite("all");
+	org.add_child(org1).add_child(org2);
+	//org.hard_working(); //终极
+	//org.hard_working("orimuse_shang"); //二级
+	//org.hard_working("beijin开发"); //n级
+	//org.hard_working("z6"); //叶子
+</script>
+
+
+
+
+
+

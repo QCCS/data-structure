@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+
+<script>
+    //这是a对象,只有一个方法是:say
+//    var a={
+//        say:function aa(str){
+//
+//            console.log(this)
+//            console.log("say"+str);
+//            //虽然,没有eat方法,但是任然可以调用,不知道其他语言可以不
+//            this.eat("rice");
+//
+//        }
+//    }
+//
+//    //这个b对象,只有一个方法eat
+//    var b={
+//        eat:function bb(str){
+//            console.log("eat"+str);
+//        }
+//    }
+//
+//    //现在让a对象,调用b的方法
+//    // a.say.call(b,"hi");
+//    //神奇改变this指向
+//
+//    //
+//    function add(a,b){
+//        return a+b;
+//    }
+//    function bind_add(fn,index){
+//        return function (){
+//            fn.apply(index,arguments);
+//        }
+//    }
+//    bind_add(add,5)(3);
+
+    //
+    //    //继承
+    //
+    //    function inherit(p){
+    //        if(p===null){//p不能是null
+    //            throw TypeError();
+    //        }
+    //        if(Object.create){//如果create存在
+    //            return Object.create(p)//直接使用
+    //        }
+    //        var t=typeof p;//进一步检测
+    //        if(t!=="Object"&&t!=="function"){
+    //            throw TypeError();
+    //        }
+    ////        最简单的继承就下面
+    //        function f(){
+    //        }
+    //        f.prototype=p;
+    //        return new f();
+    //    }
+    //
+    //    //属性复制继承
+    //    function extend(o,p){
+    //        for( prop in p){
+    //            o[prop]=p[prop]
+    //        }
+    //        return o;
+    //    }
+    //
+
+    //
+    //    var arr=[,1,2];
+    //    console.log(arr.length);
+    //    console.log(arr[0])
+    //    arr[1110]=100;
+    //    console.log(arr.length);
+    //    console.log(arr[10])
+//
+//
+//
+//    function f(y){
+//        console.log(this) ;
+//        console.log(this.x+y) ;
+//    }
+//    var o={
+//        x:1
+//    }
+//    //把f对象绑定到o上
+//    var g= f.bind(o);
+//    //    这个的意义就是把f的this指向o
+//    g(2);
+//
+//    //bind是真的函数的一个方法,不是对象,所有对象不能用bind
+//
+//    var g2= my_bind(f,o);
+//    //把f对象绑定到o上
+//    function my_bind(f,o){
+//        return function (){
+//            f.apply(o,arguments)
+//        }
+//    }
+//    g2(2);
+
+//    a={i:2}
+//    function fun(x,y){
+//        alert(x+y);
+//        alert(this.i);
+//    }
+//
+//    function bind(){
+//        var _this=this;//保存当前调用的对象
+//        var arg=Array.prototype.slice.call(arguments,1);//提取参数，bind返回的新函数的参数可以先被赋值。例如fun函数的x可以在bind调用时就产生赋值（利用闭包保存），然后在调用返回的新函数时再赋其他的值
+//        var fn=arguments[0];//保存返回的新函数调用时的上下文对象
+//        return function(){
+//            _this.apply(fn,Array.prototype.concat(Array.prototype.slice.call(arguments),arg));
+////返回的新函数
+//        }
+//    }
+//
+//    Function.prototype.bind=bind;//覆盖原型中的bind
+//    fun.bind(a,1)(2)
+
+
+    function get_obj(obj){
+        _this=this;
+        _this.say_b=obj.say_b;
+        return _this;
+    }
+    function get_new_obj(obj){
+        var _obj={};
+        for(var key in this){
+            _obj[key]=this[key];
+        }
+        _obj.say_a=obj.say_a;
+        return _obj;
+    }
+
+    var a={
+        say_a:function(){
+            console.log(this)
+        },
+        get_obj:get_obj
+    }
+
+    var b={
+        say_b:function(){
+            console.log(this)
+        },
+        get_new_obj:get_new_obj
+    }
+
+
+    for(var key in a){
+        console.log(a.key)//这样不行,
+        console.log(a[key])//这样行,
+        //因为可以是一个字符串:a["say_a"]与a."say_a"
+    }
+
+
+
+//    a.say_a();
+//    b.say_b();
+//
+//    a.get_obj(b).say_b();
+//    b.get_new_obj(a).say_a();
+</script>

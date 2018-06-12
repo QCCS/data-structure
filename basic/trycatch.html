@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+		 
+		</style>
+	</head>
+	<body>
+	 
+	</body>
+</html>
+<script>
+	i=0;
+	try{ 
+		console.log("无论有没有异常总是被执行，但是异常的时候不会出现报错")
+		console.log(i);
+		console.log("一旦遇到上面有错误，下面就不会执行了");
+		console.log("没有错误会执行");
+	}catch(e){
+		//TODO handle the exception
+		console.log("有异常时候执行");
+		console.log("i");
+		return;//就算是有return任然不能阻止finally的执行
+	}finally{
+		console.log("无论怎样，这一句总是被执行 ")
+	}
+
+</script>

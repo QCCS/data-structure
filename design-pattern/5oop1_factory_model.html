@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+</html>
+<script>
+	window.onload=function(){
+		var obj=new Object();
+		obj.name="zl";
+		obj.sex="man";
+		obj.say=function(){
+			console.log(1);
+		};
+		//工厂模式(非标准)安全模式
+		function create_person(name,sex,age){
+			var obj=new Object();
+			obj.name=name;
+			obj.sex=sex;
+			obj.age=age;
+			return obj;
+		}
+		var p1=new create_person("zl","man",23);
+		//console.log(p1.name);
+		//标准写法
+		function person(name,sex,age){
+			this.name=name;
+			this.sex=sex;
+			this.age=age;
+		}
+		var p2=new create_person("zl","man",23);
+		 console.log(p2.name);
+		 //注意在JavaScript，由于定义的类是函数，那么如果类这样直接调用
+		 //person("name","sex","age");//并没有错误，只是this的指向为window，也就是执行
+		 //var name="name",,,,,,三句
+	}
+</script>
+
+
+
+
+
+
+

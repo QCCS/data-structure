@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>前端开发的优化问题</h2>
+<ol>
+    <li>减少http请求次数:css spirit,data uri</li>
+    <li>js,css源码压缩</li>
+    <li>前端模板 js+数据,减少由于HTML标签导致的带宽浪费,前端用变量保存AJAX请求结果,每次操作本地变量,
+    不用请求,减少请求次数</li>
+    <li>用innerHTML代替DOM操作,减少DOM操作次数,优化javascript性能</li>
+    <li>用setTimeout来避免页面失去响应</li>
+    <li>用法hash-table来优化查找</li>
+    <li>当需要设置样式很多的时候,用className,而不是直接操作style</li>
+    <li>少用全局变量</li>
+    <li>缓存DOM节点查找的结果</li>
+    <li>避免使用css expression</li>
+    <li>图片预加载</li>
+    <li>避免在页面的主题布局中使用table,table要等其中的内容完全下载之后才会显示出来,比div布局慢</li>
+</ol>
+</body>
+</html>

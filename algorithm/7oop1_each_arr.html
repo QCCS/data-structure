@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+</html>
+<script>
+	window.onload=function(){
+		//js中自带的数组遍历方法，不能遍历多维数组
+		var arr1=[1,9,2,4];
+		var arr2=[3,2,21,11,[2,[3]],['aaaa',[111,"cccc"],"bbb"]];
+		arr1.forEach(function(i,index,array){
+			console.log(i);//依次打印元素
+		})
+		arr2.forEach(function(i,index,array){
+			console.log(i);//多维数组会一次打印
+		})
+		var aaaaa={};
+		//实现多维数组的遍历，在原型上继承
+		Array.prototype.each=function(fn){
+				try{
+					//this代表数组，this.i如果存在就ok，没有就初始化
+					this.i||(this.i=0);
+					if(this.length>0&&fn.constructor==Function){//如果对象是数组，且参数为函数
+						while(this.i<this.length){//下面正式开始，核心
+							var e=this[this.i];
+							if(e&&e.constructor==Array){//一旦发现数组里面的元素是数组，就递归
+								e.each(fn);
+							}else{
+								//调用函数打印e
+								 fn.call(e,e);//本函数调用（代替本函数，参数e）
+								//第一个参数只是冒充对象，第二个参数是要实际打印
+								//fn.call(aaaaa,e);//aaaaa上面已经定义，这里测试
+								//fn(e);这样也可以，fn()=fn.call(obj,[]),obj必须定义，有时候，并没有其他意义
+							}
+							this.i++;
+						}
+						this.i=null;
+					}
+				}
+				catch(ex){
+			}
+			return this;
+		}
+		
+		arr2.each(function(item){
+			console.log(item);//可以打印多维数组
+		})
+		
+	}
+</script>

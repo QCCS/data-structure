@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+
+<script>
+    //主要解决在软件系统中，有时候面临着"一个复杂对象"的创建工作，其通常由各个部分的子对象用一定的算法构成；
+    //由于需求的变化，这个复杂对象的各个部分经常面临着剧烈的变化，但是将它们组合在一起的算法却相对稳定。
+
+    //应用实例： 1、去肯德基，汉堡、可乐、薯条、炸鸡翅等是不变的，而其组合是经常变化的，
+    //生成出所谓的"套餐"。 2、JAVA 中的 StringBuilder。
+    var a={
+        price:23,
+        name:"Burger"
+    }
+    var b={
+        price:3,
+        name:"Packing"
+    }
+    var c={
+        price:2,
+        name:"Coke"
+    }
+
+    var aa={
+        price:13,
+        name:"Pepsi"
+    }
+    var bb={
+        price:230,
+        name:"Oriju"
+    }
+    var cc={
+        price:20,
+        name:"Coco"
+    }
+
+    var builder={
+        //创建套餐
+        builder:function(arr){
+            var price=0;
+            var name="";
+            for(var i=0;i<arr.length;i++){
+                price+=arr[i]["price"];
+                name+=arr[i]["name"];
+                name+=",";
+            }
+            return {
+                T_price:price,
+                T_name:name
+            }
+        }
+    }
+
+    //创建套餐
+    var b_a=builder.builder([a,b,cc])
+    var b_b=builder.builder([aa,b,cc])
+
+
+    console.log(b_a)
+    console.log(b_b)
+</script>

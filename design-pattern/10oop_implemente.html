@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+</html>
+<script>
+	//javascript定义接口有三种方式
+	//1注释描述的方式
+	//2属性检测的方式
+	//3鸭式变型的方式
+	
+	//	interface Composite{
+	//		function add(obj);
+	//		function remove(obj);
+	//		function update(obj);
+		//}
+	var CompositeImpl=function(){
+		this.add=function(obj){	
+		}
+		this.remove=function(obj){
+		}
+	}
+	var c1=new CompositeImpl();
+	var c2=new CompositeImpl();
+	//上面那样把方法写在一个对象里头，每次实例的时候，就去执行一次，而且，c1.add不等于c2.add
+	//那么解决方式就是把方法写在原型上面
+	//像下面这样
+	CompositeImpl.prototype.add1=function(obj){
+		//dosomething
+	}
+	CompositeImpl.prototype.remove1=function(obj){
+		//dosomething
+	}
+	CompositeImpl.prototype.update=function(obj){
+		//dosomething
+	}
+	//上面的方式就是实现接口方式，特点1程序员可以有一个参考，因为在接口上定义好了
+	//很好看，但是还是一个文档的范畴，少实现接口中的一个方法也没有检测机制，java中是必须
+	//全部要实现的
+	
+//-------------------------------------------------------------------	
+	
+	
+	//第二种实现接口的方式：属性检测，判断接口是否存在
+	
+	var CompositeImpl2=function(){
+			//显示的再类的内部，接收所实现的接口
+			//一般来说，一个规范，我们的项目经理，在类的内部，定义一个变量（名字要固定），
+			this.implementsInterface=['Composite','FormItem'];
+			
+	}
+	CompositeImpl2.prototype.add2=function(){
+		//dosomething
+		console.log("a2")
+		
+	}
+	CompositeImpl2.prototype.remove2=function(obj){
+		//dosomething
+	}
+	CompositeImpl2.prototype.update2=function(obj){
+		//dosomething
+		
+	}
+	CompositeImpl2.prototype.select2=function(obj){
+		//dosomething
+		
+	}
+	
+	//检测类
+	function CheckCompositeImpl(instance){
+		//判断当前对象是否实现了所有的接口
+		if(!IsImplements(instance,'Composite','FormItem')){
+			throw new Error('Object does not implement a required inetrface');
+		}
+	}
+	
+	//下面才是核心方法，检测,返回布尔值
+	//判断实例对象有没有接口
+	function IsImplements(Object){
+		//arguments对象，获得函数的实际参数
+		for(var i=1;i<arguments.length;i++){
+			//先屏蔽第一个参数,因为i已经等1了
+			var interfaceName=arguments[i];
+			//判断此方法到底成功还是失败
+			var interfaceFound=false;
+			for(var j=0;j<object.implementsInterfaces.length;j++){
+				if(object.implementsInterface[j]==interfaceName){
+					interfaceFound=true;
+					break;
+				}
+				if(!interfaceFound)
+				{
+					return false;
+				}
+				
+			}
+			return true;
+		}
+	}
+	
+	//var c4=new CompositeImpl2();
+	//CheckCompositeImpl(c4);
+	//c4.add2()
+	
+	//还是有问题，只是检测了接口，没有检测方法
+	
+	//-----------------------------------------------------------
+	
+	
+	
+	// 实现接口的第三种方式：鸭式辨型法实现接口(最完美的javascript实现接口方式)
+
+				var Interface = function(name,methods){
+					//判断接口的参数个数
+					if(arguments.length != 2){
+						throw new Error('this instance interface constructor arguments must be 2 length!');
+					}
+					this.name = name ; 
+					this.methods = [] ; //定义一个内置的空数组对象 等待接受methods里的元素(方法名字)
+					for(var i = 0,len = methods.length ; i <len ; i++){
+						 if( typeof methods[i] !== 'string'){
+						 		throw new Error('the Interface method name is error!');
+						 }
+						 this.methods.push(methods[i]);
+					}
+				}
+				
+
+				
+				// 二： 准备工作：
+				// 1 实例化接口对象
+				var CompositeInterface = new Interface('CompositeInterface' , ['add' , 'remove']);
+				var FormItemInterface  = new Interface('FormItemInterface' , ['update','select']);
+				//  CompositeImpl implements CompositeInterface , FormItemInterface
+				
+				// 2 具体的实现类 
+				var CompositeImpl = function(){
+					
+				} 
+				// 3 实现接口的方法implements methods 			
+				CompositeImpl.prototype.add = function(obj){
+					console.log('add');
+					// do something ...
+				}
+				CompositeImpl.prototype.remove = function(obj){
+					console.log('remove');
+					// do something ...
+				}			
+				CompositeImpl.prototype.update = function(obj){
+					console.log('update');
+					// do something ...
+				}	
+				 			
+				CompositeImpl.prototype.select = function(obj){
+					console.log('select');
+					// do something ...
+				}	
+				 
+				
+				// 三：检验接口里的方法
+				// 如果检验通过 不做任何操作 不通过：浏览器抛出error
+				// 这个方法的目的 就是检测方法的
+				Interface.ensureImplements = function(object){//传入实现接口的对象
+					// 如果检测方法接受的参数小于2个 参数传递失败!
+					//至少需要传入实现接口的对象，还有实例的接口
+					if(arguments.length < 2 ){
+						throw new Error('Interface.ensureImplements method constructor arguments must be  >= 2!');
+					}
+					// 获得接口实例对象 
+					for(var i = 1 , len = arguments.length; i<len; i++ ){
+						var instanceInterface = arguments[i];
+						// 判断参数是否是接口类的类型
+						if(instanceInterface.constructor !== Interface){
+							throw new Error('the arguments constructor not be Interface Class');
+						}
+						// 循环接口实例对象里面的每一个方法
+						for(var j = 0 ; j < instanceInterface.methods.length; j++){
+							// 用一个临时变量 接受每一个方法的名字(注意是字符串)
+							var methodName = instanceInterface.methods[j];
+							// object[key] 就是方法
+							if( !object[methodName] || typeof object[methodName] !== 'function' ){
+								throw new Error("the method name '" + methodName + "' is not found !");
+							}
+						}
+					}
+				}
+				
+				var c1 = new CompositeImpl();//实现接口的对象
+				Interface.ensureImplements(c1,CompositeInterface,FormItemInterface);
+				c1.add();
+					
+			
+</script>

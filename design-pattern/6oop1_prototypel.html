@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+</html>
+<script>
+	window.onload=function(){
+		function person(name,sex,age){
+			this.name=name;
+			this.sex=sex;
+			this.age=age;
+			this.say=function(){
+				console.log("l am "+this.name);
+			}
+		}
+		var p1=new person("zl","man",23);
+		var p2=new person("zl","man",23);
+		console.log(p1.say===p2.say);
+		//p1.say!=p2.say,这种方式浪费空间，全部都一样，可以存在于一个对象里面
+		//利用原型继承
+		function person_pro(){
+			
+		}
+		var obj=person_pro.prototype;
+		    obj.name="name";
+			obj.sex="sex";
+			obj.age="age";
+			obj.say=function(){
+				console.log("l am "+this.name);
+			}
+		var p3=new person_pro();
+		var p4=new person_pro();
+		console.log(p3.say===p4.say);
+		//p3.say==p4.say,这种方式，会共用原型里面的函数
+	 
+		//ECMA5新特性Object.keys()返回对象中的全部key，在一个数组中
+		var obj_test={};
+		obj_test.name="name";
+		obj_test.age="age";
+		var keys_arr=Object.keys(obj_test);
+		console.log(keys_arr);
+		console.log(obj_test[keys_arr[1]]);//打印年龄
+		
+		//新特性可以用于打印json
+		var json={
+			"name":"json",
+			"age":"300",
+			"sex":"none"
+		}
+		var keys_json=Object.keys(json);
+		console.log(keys_json);
+		console.log(json[keys_json[1]]);//打印年龄
+		//var c=Object.getOwnPropertyNames(obj_test);
+		//console.log(c);//如果c有构造器，也会打印出来
+	}
+</script>
+
+
+
+
+
+
+

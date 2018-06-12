@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+</html>
+<script>
+	//数组去重
+	//对象的key值不会重复，后者覆盖前者
+	
+	var arr1=[2,6,90,7,3,900];
+	var arr2=[55,2,5,3,900];
+	var arr=arr1.concat(arr2);
+	
+	function tosingle_arr(arr){
+		var obj={};
+		var arr_=[];
+		for(var i=0;i<arr.length;i++){
+	 		obj[arr[i]]=true;
+	 	}
+		for(var attr in obj){
+			if(obj.hasOwnProperty(attr)){
+				arr_.push(attr);	
+			}
+		}
+		return arr_;
+	}
+ 
+console.log(tosingle_arr(arr));
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+

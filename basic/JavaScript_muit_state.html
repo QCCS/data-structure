@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	 
+	</body>
+</html>
+<script>
+
+//定一个接口方法,详细内容看
+	var Interface = function(name,methods){
+					if(arguments.length != 2){
+						throw new Error('this instance interface constructor arguments must be 2 length!');
+					}
+					this.name = name ; 
+					this.methods = [] ; 
+					for(var i = 0,len = methods.length ; i <len ; i++){
+						 if( typeof methods[i] !== 'string'){
+						 		throw new Error('the Interface method name is error!');
+						 }
+						 this.methods.push(methods[i]);
+					}
+				}
+	Interface.ensureImplements = function(object){
+					if(arguments.length < 2 ){
+						throw new Error('Interface.ensureImplements method constructor arguments must be  >= 2!');
+					}
+					for(var i = 1 , len = arguments.length; i<len; i++ ){
+						var instanceInterface = arguments[i];
+						if(instanceInterface.constructor !== Interface){
+							throw new Error('the arguments constructor not be Interface Class');
+						}
+						for(var j = 0 ; j < instanceInterface.methods.length; j++){
+							var methodName = instanceInterface.methods[j];
+							if( !object[methodName] || typeof object[methodName] !== 'function' ){
+								throw new Error("the method name '" + methodName + "' is not found !");
+							}
+						}
+					}
+				}
+	//定义一个继承的方法
+	var self_extend=function(child,parent){
+				    var F = new Function();
+					F.prototype=parent.prototype;
+					child.prototype=new F();
+					child.prototype.constructor=child;
+					child.superClass=parent.prototype;
+					if(parent.prototype.constructor==Object.prototype.constructor){
+						parent.prototype.constructor=parent;
+					}
+		 }
+ 
+	function car_shop(){
+		
+	}
+	car_shop.prototype={
+		constructor:car_shop,//还原构造器
+		sell_car:function(type){//何种类型的车
+			var car;
+			switch(type){
+				case "benz":car = new benz();break;
+				case "bwm":car = new bwm();break;
+				case "audi":car = new audi();break;
+				default: "nothing to buy"
+			}
+			//检测车是否实现那个接口的方法
+			Interface.ensureImplements(car,car_interface)//如果car有接口中给定的方法没有实现，就会报错
+			return car;
+		}
+	}
+	//定义车的接口,车必须实现的方法，
+	var car_interface=new Interface('car_interface',["start","run"]);
+	
+	//车的父类，只让这个类实现接口的方法，让子类继承
+	function base_car(){
+		
+	}
+	base_car.prototype={
+		constructor:base_car,
+		start:function(){
+			//this.constructor是子类的构造方法，这容易理解，this.constructor.name表示构造函数的名字
+			//这里实现了一个多态
+			console.log(this.constructor.name+" this is start")
+		},
+		run:function(){
+			console.log("this is running")
+		}
+	}
+	//下面就方便了，可以直接继承
+	function benz(){};
+	self_extend(benz,base_car);
+	
+	function bwm(){};
+	self_extend(bwm,base_car);
+	
+	function audi(){};
+	self_extend(audi,base_car);
+
+	var shop=new car_shop();
+	var car=shop.sell_car("benz");//这里传入车的类型，父类根据子类类型调用相关方法
+	car.start();
+	car.run();
+	
+	
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

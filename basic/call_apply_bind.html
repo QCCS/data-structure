@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+
+<script>
+
+//    var f1 = function () {
+//        console.log(1)
+//    };
+//    var f2 = function () {
+//        console.log(2)
+//    };
+//    console.log(Function.prototype.call);
+//    console.log(Function.prototype.call.call);
+//    console.log(Function.prototype.call.call.call);
+//    Function.prototype.call(f1);//无法输出
+//
+//    f1();//输出1
+//    Function.prototype.call.call(f1);//输出1
+//    Function.prototype.call.call.call.call.call.call(f1);//输出1
+//
+//    Function.prototype.call(f1,f2);//无法输出
+//    Function.prototype.call.call(f1,f2);//输出1
+//    Function.prototype.call.call.call(f1,f2);//输出1
+
+//任何的prototype是一个对象 {}  即为object
+//Function.prototype.call  这样是读取这个对象上面的call
+//call的作用是改变一个可执行函数的this，并且调用它
+//Function.prototype.call(f1)这样调用在call之前是prototype，prototype是一个对象
+//Function.prototype.call.call(f1)  而这样在最后一个call的.前面是一个call，他是prototype的一个方法
+//对象有prototype
+//实例有__proto__
+
+
+
+    var Test=new Function();
+    var test_obj=new Object();
+    var test=new Test();
+    console.log(test)
+    console.log(test_obj)
+
+    console.log(test.__proto__===Test.prototype)
+    console.log(test_obj.__proto__===Object.prototype)
+    console.log(test.__proto__.__proto__===Object.prototype)
+
+    console.log(Function.prototype)
+//
+//    console.log(test_obj)
+//    console.log(test_a)
+//
+
+
+    //    var obj = {
+    //        aa: function (aa) {
+    //            console.log(aa)
+    //        },
+    //        bb: function () {
+    //            console.log("bb")
+    //        },
+    //        getdata: function (cb) {
+    //            cb();
+    //        },
+    //        render: function () {
+    //            var that = this;
+    //            //保存对象的指针,多了一个变量
+    //            this.getdata(function () {
+    //                that.aa("aaa");
+    //                that.bb();
+    //            });
+    //        },
+    //
+    //        renderBind: function () {
+    //            this.getdata(function () {
+    //                this.aa("aaa");
+    //                this.bb();
+    //            }.bind(this));//不需要多写一个变量
+    //        }
+    //    };
+    //    obj.render();
+    //    obj.renderBind();
+//
+//有些浏览器不兼容bind,下面可以写兼容方法
+//    if (!Function.prototype.bind) {
+//        Function.prototype.bind = function (oThis) {
+//            var aArgs = Array.prototype.slice.call(arguments, 1),
+//                    fToBind = this,
+//                    fNOP = function () {
+//                    },
+//                    fBound = function () {
+//                        return fToBind.apply(this instanceof fNOP
+//                                        ? this
+//                                        : oThis || this,
+//                                aArgs.concat(Array.prototype.slice.call(arguments)));
+//                    };
+//
+//            fNOP.prototype = this.prototype;
+//            fBound.prototype = new fNOP();
+//
+//            return fBound;
+//        };
+//    }
+//
+
+//
+//
+//    var arrayLike = {
+//        '0': 'a',
+//        '1': 'b',
+//        '2': 'c',
+//        length: 3
+//    };
+//    Object.prototype.slice1 = Array.prototype.slice;
+//    console.log(Array.prototype)
+//    console.log(Object.prototype)
+//    var str = "1asa";
+//    var arr1 = Object.prototype.slice1.apply(str)
+//    var arr2 = Object.prototype.slice1.apply(arrayLike)
+//    console.log(arr1)
+//    console.log(arr2)
+//
+//
+//
+//
+//    var f2 = function () {
+//        console.log(2)
+//    };
+//    //  Function.prototype.call.call(Function.prototype.call, f2)//2
+//    //Function.prototype.call.call(f1, f2);//1
+//    console.log(Function.prototype.call.call)
+    //f2.call(arrayLike);//2
+//
+//    function add(a, b){
+//        console.log("add");
+//        console.dir(this);
+//    }
+//
+//    function sub(a, b){
+//        console.log("sub");
+//        console.dir(this);
+//    }
+//
+//
+//    //调用add,并且把这个函数的this指向sub
+//    add.call([], 1, 2);
+//    //被调用者.call(调用者,args)
+//
+//    sub.apply(add, [1, 2]);
+//
+//
+//console.log('---------')
+//
+//    var Bind = function(object, fun) {
+//        var can = Array.prototype.slice.call(arguments).slice(2);
+//        return function() {
+//            return fun.apply(object, can.concat(Array.prototype.slice.call(arguments)));
+//        }
+//    }
+//    var obj={};
+//    function a(a,b,c){
+//        console.log(this)
+//        return a+b+c;
+//    }
+//    var result=Bind(obj,a,1,2,3);
+//    console.log(result());//6
+
+
+
+
+</script>

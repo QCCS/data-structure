@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+
+<script>
+
+    //每隔三个数字加逗号
+    var str_number = "1234545435456576867867867456678901234567890678901234567890678901234567890";
+    //mothed2
+    var new_str2 = "";
+    function add_d2(str) {
+        var str = str;
+        var reg_test = /\d{3}/;
+        new_str2 += (str.match(reg_test)[0] + ",");
+        str = str.replace(str.match(reg_test)[0], "");
+        if (str.length > 3) {
+            add_d2(str);
+        } else if (str.length <= 3) {
+            new_str2 += (str);
+        }
+        return new_str2;
+    };
+    console.log(str_number);
+    var new_str2 = add_d2(str_number);
+    console.log(new_str2);
+</script>

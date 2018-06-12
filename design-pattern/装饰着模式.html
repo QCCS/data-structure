@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+</body>
+</html>
+<script>
+    //装饰者模式
+    var car=function(car_){
+
+        this.car_=car_;//这一句就是为了让子类继承父类的本体，方便叫额外的属性
+    };
+    car.prototype={
+        constructor:car,
+        get_price:function(){
+            return 20000;
+        },
+        assemble:function(){
+            console.log("组装");
+        }
+    };
+
+    //对于车的新的需求
+    //写子类
+
+    var new_car=function(){
+
+    }//继承
+
+    //对于车的新的需求
+    //写子类
+
+    var new_new_car=function(){
+
+    }//继承
+
+    //会出现一个问题，是，子类添加的属性会影响到父类的属性与方法，比如车的价格。
+    //原理就是重写
+
+    //------------------------------------------------
+    //装饰者模式
+    //定义一个继承的方法
+    var self_extend=function(child,parent){
+        //原型继承方法，如需继承非原型方法，用parent_obj.call(this,())//还能实现多继承
+        var F = new Function();
+        F.prototype=parent.prototype;
+        child.prototype=new F();
+        child.prototype.constructor=child;
+        child.superClass=parent.prototype;
+        if(parent.prototype.constructor==Object.prototype.constructor){
+            parent.prototype.constructor=parent;
+        }
+    }
+    //完美继承
+    //加车灯的车
+    var light_car=function(car_){
+        light_car.superClass.constructor.call(this,car_);//构造函数继承
+    }
+    self_extend(light_car,car)//继承原型
+
+    light_car.prototype={//重写方法
+        constructor:light_car,
+        get_price:function(){
+            return this.car_.get_price()+10000;
+        },
+        assemble:function(){
+            console.log("组装,车灯");
+        }
+    };
+
+    //加冰箱的车
+    var ice_car=function(car_){
+        ice_car.superClass.constructor.call(this,car_);//构造函数继承
+    }
+    self_extend(ice_car,car)//继承原型
+    ice_car.prototype={//重写方法
+        constructor:ice_car,
+        get_price:function(){
+            return this.car_.get_price()+20000;
+        },
+        assemble:function(){
+            console.log("组装,冰箱");
+        }
+    };
+
+
+    var car1=new car();//原来的车
+    car1.assemble();
+    console.log(car1.get_price());
+
+    var car2=new light_car(car1);//加车灯
+    car2.assemble();
+    console.log(car2.get_price());
+
+    var car3=new ice_car(car1);//加冰箱
+    car3.assemble();
+    console.log(car3.get_price());
+
+    //子类与父类，子类与子类没有耦合
+
+
+    //----------------------------------------
+    //装饰者模式不仅适用于对象，函数也一样
+    function get_date(){
+        return (new Date()).toString();
+    }
+    function upper_get_date(){
+        return function(){//这句经典
+            return (new Date()).toString().toUpperCase();
+        }
+    }
+    //保证不改变原有对象的基础上去扩展一些想要的需求与方法
+
+
+</script>
+
+
+
+
+
+
+
+
+

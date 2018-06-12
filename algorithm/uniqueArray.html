@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	 	<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+</html>
+<script>
+	var arr1=["zhouli","zhouli",9,0,3];
+	var arr2=[3,6,9,8,22,0];
+	var arr3=arr1.concat(arr2);
+ 
+	function uniqueArray(data){  
+	    data = data || [];  
+	    var a = {};  
+	    for (var i=0; i<data.length; i++) {  
+	        var v = data[i];  //把数组中元素的值，当成对象中的键，当检查到有的值（重复的）已经生成对应的键，就不要再次生成了键。最后用for把键提取到数组
+	        if (typeof(a[v]) == 'undefined'){ //利用键值对覆盖
+	    		a[v] = 1; 
+	        }  
+	    };  
+	    data.length=0;  //把数组重新排序
+	    for (var i in a){  
+	        data[data.length] = i;  
+	    }  
+	    return data;  
+	}  
+
+console.log(uniqueArray(arr3))
+</script>

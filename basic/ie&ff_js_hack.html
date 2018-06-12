@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ol>
+
+    <li>
+        集合类对象问题
+        (1)现有问题：
+        现有代码中许多集合类对象取用时使用 ()，IE 能接受，Firefox(火狐)不能。
+        (2)解决方法：
+        改用 [] 作为下标运算。如：document.forms("formName") 改为 document.forms
+        ["formName"]。
+        又如：document.getElementsByName("inputName")(1) 改为
+        document.getElementsByName("inputName")[1]
+
+    </li>
+    <li>
+        window.event
+        (1)现有问题：
+        使用 window.event 无法在火狐浏览器上运行
+        (2)解决方法：
+        火狐 的 event 只能在事件发生的现场使用，此问题暂无法解决。可以这样变通：
+        原 代码(可在IE中运行)： <br /><input type="button" name="someButton" value="
+提交" onclick="javascript:gotoSubmit()"/><br />...<br /><script
+            language="javascript"><br />function gotoSubmit() {<br />...<br />alert
+    (window.event); // use window.event<br />...<br />}<br /></script>
+
+        新 代码(可在IE和火狐中运行)： <input type="button" name="someButton" value="
+提交" onclick="javascript:gotoSubmit(event)"/><br />...<br /><script
+            language="javascript"><br />function gotoSubmit(evt) {<br />evt = evt ? evt :
+            (window.event ? window.event : null);<br />...<br />alert(evt); // use evt<br
+    />...<br />}<br /></script>
+        此外，如果新代码中第一行不改，与老代码一样的话(即 gotoSubmit 调用没有给参数)
+        ，则仍然只能在IE中运行，但不会出错。所以，这种方案 tpl 部分仍与老代码兼容。
+    </li>
+    <li>
+        HTML 对象的 id 作为对象名的问题
+        (1)现有问题
+        在 IE 中，HTML 对象的 ID 可以作为 document 的下属对象变量名直接使用。在火狐中
+        不能。
+        (2)解决方法
+        用 getElementById("idName") 代替 idName 作为对象变量使用。
+
+    </li>
+    <li>
+        变量名与某 HTML 对象 id 相同的问题
+        (1)现有问题
+        在 火狐 中，因为对象 id 不作为 HTML 对象的名称，所以可以使用与 HTML 对象 id
+        相同的变量名，IE中能。
+        (2)解决方法
+        在声明变量时，一律加上 var ，以避免歧义，这样在 IE 中亦可正常运行。
+        此外，最好不要取与 HTML 对象 id 相同的变量名，以减少错误。
+
+    </li>
+    <li>
+        event.x 与 event.y 问题
+        (1)现有问题
+        在IE
+        103f
+        中，event 对象有 x, y 属性，火狐中没有。
+        (2)解决方法
+        在火狐中，与event.x 等效的是 event.pageX。但event.pageX IE中没有。
+        故采用 event.clientX 代替 event.x。在IE 中也有这个变量。
+        event.clientX 与 event.pageX 有微妙的差别（当整个页面有滚动条的时候），不过大
+        多数时候是等效的。
+
+        如果要完全一样，可以稍麻烦些：
+        mX = event.x ? event.x : event.pageX;
+        然后用 mX 代替 event.x
+
+    </li>
+    <li>
+        关于frame
+        (1)现有问题
+        在 IE中 可以用window.testFrame取得该frame，火狐中不行
+        (2)解决方法
+        在frame的使用方面火狐和ie的最主要的区别是：
+        如果在frame标签中书写了以下属性：
+        <frame src="xx.htm" id="frameId" name="frameName" />
+        那么ie可以通过id或者name访问这个frame对应的window对象
+        而火狐只可以通过name来访问这个frame对应的window对象
+        例如如果上述frame标签写在最上层的window里面的htm里面，那么可以这样访问
+        ie： window.top.frameId或者window.top.frameName来访问这个window对象
+        火狐： 只能这样window.top.frameName来访问这个window对象
+
+        另外，在火狐和ie中都可以使用window.top.document.getElementById("frameId")来访
+        问frame标签
+        并且可以通过window.top.document.getElementById("testFrame").src = 'xx.htm'来
+        切换frame的内容
+        也都可以通过window.top.frameName.location = 'xx.htm'来切换frame的内容
+        关于frame和window的描述可以参见bbs的‘window与frame’文章
+        以及/test/js/test_frame/目录下面的测试
+
+    </li>
+    <li>
+        body 对象
+        火狐的body在body标签没有被浏览器完全读入之前就存在，而IE则必须在body完全被读
+        入之后才存在
+
+    </li>
+    <li>
+        url encoding
+        在js中如果书写url就直接写&不要写&例如var url = 'xx.jsp?
+        objectName=xx&objectEvent=xxx';
+        frm.action = url那么很有可能url不会被正常显示以至于参数没有正确的传到服务器
+        一般会服务器报错参数没有找到
+        当然如果是在tpl中例外，因为tpl中符合xml规范，要求&书写为&
+        一般火狐无法识别js中的&
+
+    </li>
+    <li>nodeName 和 tagName 问题
+        (1)现有问题：
+        在火狐中，所有节点均有 nodeName 值，但 textNode 没有 tagName 值。在 IE 中，
+        nodeName 的使用好象
+        有问题（具体情况没有测试，但我的IE已经死了好几次）。
+        (2)解决方法：
+        使用 tagName，但应检测其是否为空。
+
+
+    </li>
+    <li>
+        元素属性
+        IE下 input.type属性为只读，但是火狐下可以修改
+
+    </li>
+    <li>
+        自定义属性问题
+
+        说明:IE下,可以使用获取常规属性的方法来获取自定义属性,也可以使用getAttribute()
+        获取自定义属性;Firefox下,只能使用getAttribute()获取自定义属性.
+        解决方法:统一通过getAttribute()获取自定义属性.
+
+
+    </li>
+    <li>
+        event.srcElement问题
+
+        说明:IE下,even对象有srcElement属性,但是没有target属性;Firefox下,even对象有
+        target属性,但是没有srcElement属性.
+        解决方法:使用obj(obj = event.srcElement ? event.srcElement : event.target;)来
+        代替IE下的event.srcElement或者Firefox下的event.target.
+
+    </li>
+
+<li>
+    window.location.href问题
+
+    说明:IE或者Firefox2.0.x下,可以使用window.location或
+    window.location.href;Firefox1.5.x下,只能使用window.location.
+    解决方法:使用window.location来代替window.location.href.
+
+</li>
+    <li>
+        模态和非模态窗口问题
+
+        说明:IE下,可以通过showModalDialog和showModelessDialog打开模态和非模态窗
+        口;Firefox下则不能.
+        解决方法:直接使用window.open(pageURL,name,parameters)方式打开新窗口。
+
+        如 果需要将子窗口中的参数传递回父窗口,可以在子窗口中使用window.opener来访问父
+        窗口. 例如：var parWin = window.opener; parWin.document.getElementById
+        ("Aqing").value = "Aqing";
+
+    </li>
+    <li>
+        innerHTML是指某个网页元素内部的代码,而innerTEXT是指某个网页元素的文本内容.写个例子给你:
+        innerText在IE中能正常工作，但是innerText在FireFox中却不行.
+
+        解决方法:
+
+        if(navigator.appName.indexOf("Explorer") > -1){
+
+        document.getElementById('element').innerText = "my text";
+
+        } else{
+
+        document.getElementById('element').textContent = "my text";
+
+        }
+
+    </li>
+
+    <li>
+        FireFox中类似 obj.style.height = imgObj.height 的语句无效
+
+        解决方法：
+
+        obj.style.height = imgObj.height + 'px';
+
+    </li>
+    <li>
+        padding 问题
+
+        padding 5px 4px 3px 1px FireFox无法解释简写,
+
+        必须改成 padding-top:5px; padding-right:4px; padding-bottom:3px; padding-
+        left:1px;
+
+    </li>
+
+
+
+</ol>
+
+</body>
+</html>

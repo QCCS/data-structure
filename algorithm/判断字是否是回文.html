@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    //判断字是否是回文
+    function ispalindrome(text){
+        if(text.length<=1){
+            return true;
+        }
+        if(text.charAt(0)!=text.charAt(text.length-1)){
+            return false;
+        }
+        return ispalindrome(text.substr(1,text.length-2));
+    }
+    var text1="asassasaaa"
+    console.log(ispalindrome(text1))
+</script>

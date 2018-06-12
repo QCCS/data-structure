@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	<input  id="inp"/>
+	<input type="button" value="匹配"  id="btn"/>
+	</body>
+</html>
+<script>
+	//match方法就是定义一个正则，然后用这个正则去找给定字符串符合这个正则的字符串
+	
+	window.onload=function(){
+		//定义一个正则表达式；两种方式
+		var reg=/a\d/;//字符串方式定义,\d表示任意数字
+		var reg2=new RegExp("a\\d","g");//对象定义方式,注意字符串中\要变成\\，是因为受到了解析的缘故
+
+		var str="dhja3，a4,a8a9";//有这样一个字符串
+
+		//然后用正则表达式来匹配这个字符串
+		//match方法
+		var re_str=str.match(reg);//匹配到的是一个¢数组,这个数组还包含两个属性，一个index与input
+		var re_str2=str.match(reg2);//index属性是返回来的数组长度，这个两个属性在没有给定全局搜索g的情况下才有
+
+	 	console.log(re_str[0]);//[a3]
+	 	console.log(re_str2);//[a3,a4,a8,a9]
+	 	console.log(re_str.input);//input代表原始输入拿来匹配的字符串dhja3，a4,a8a9
+	 	console.log(re_str.index);
+
+		console.log("---------------");
+
+		//反转字符串
+		var str_e="i am a student that love coding";
+		var str_arr=str_e.split(" ");//把字符串以空格分开
+		var new_arr=str_arr.reverse();//反正数组
+		console.log(new_arr.join(" "));//数组一空格链接
+		function power(n) {//左移,乘2
+			return 3 << n;
+		}
+		function power_(n) {//右移,除2
+			return 1 << n;
+		}
+		console.log(power(3));
+
+		//来一个案例，只要匹配到zhouli,就通过
+		// str.search（regexp）只是返回匹配到的字符串索引，如果没有匹配到的话，就返回-1；
+		var reg_test=/\d{3}/;//匹配连续的三个数字
+		var inp=document.getElementById("inp");
+		var btn=document.getElementById("btn");
+		btn.onclick=function(){
+				var inp_re=inp.value.search(reg_test);
+				if(inp_re==-1){
+					console.log("没通过");
+				}else{
+					console.log("通过");
+					console.log(inp.value.match(reg_test))
+				}
+		}
+
+		console.log("---------------");
+		//replace(regexp,replace_text);是匹配文本并且替换文本，返回匹配后的文本
+		var re_str_replace=str.replace(/a/g,"bbb");//把a换成bbb
+		console.log(re_str_replace);//dhjbbb3，bbb4,bbb8bbb9
+
+
+		console.log("---------------");
+
+
+
+		//正则表达式的法则
+
+		//基本
+		//[abc]，中括号表示匹配其中的任何一个字符，也可以有转义字符【\*abc】
+		//[n-z],表示从哪一个字符到某一个字符,表示范围
+		//{4,},至少需要匹配的次数,a{4}表示a至少连续匹配四次
+		//{4},匹配四次
+		//{2,7},匹配2到7次
+		//\d,匹配一个数字
+		//$,字符串的结束,a$最后一个为a
+		//^,字符串的开始，^a第一个为a,写法与匹配最后一个单词相反
+		//*,表示匹配的字符出现0次或者多次,a*表示a出现任意次
+		//+,匹配重复1次或更多次,a+表示匹配一个或者多个a
+		//?,匹配0次或者1次,a?表示匹配0次或者1次a,
+		//.,匹配除了换行符以外的任意字符,
+		//\b,单词边界,/\bhello\b/匹配单词hello
+		//比如/^a0\d{3}a$/,表示第一个为a,最后一个也为a,第二位是0,还有三位数字的字符串
+
+		//反义
+		//\s,匹配任意不是空白符的字符
+		//\W,匹配不是字母或数字或下划线或汉字等
+		//\w,匹配数字或者字母
+        //\B,匹配不是单词开头或结束的位置
+		//\D,匹配任意非数字的字符
+		//[^x],匹配除了x以外的任意字符,注意,如果^没在[]里面,就表示字符串开始
+
+		//分支
+		//|,管道符号,表示分支条件,\ba\b|\bd\b表示只匹配a或者d
+
+		//分组
+		//(),括号表示分组,(aa.){3}表示匹配aa.要连续匹配3次
+
+		//反向引用
+		//\b(?<Word>\w+)\b\s+\k<Word>\b,<name>,尖括号表示一个分组的名字,\k<name>表示再次匹配这个组
+
+
+		//断言
+		//正前向断言，只有当字符串右侧出现匹配这个正则表达式的时候，才匹配字符串，断言中的正则表达式，不会返回、
+		//str="img1.jpg,img2.gif,img3.bmp"
+		///(\w*)(?=\.gif)/这会匹配到img2
+		//负前向断言，只有当字符串右侧不出现匹配这个正则表达式的时候，才匹配字符串，断言中的正则表达式，不会返回、
+		///(\w*)(?<=img2)/这会匹配到.gif
+
+		//注释
+		//(?#comment), 比如(?<=# 断言要匹配的文本的前缀),需要用括号包起来
+
+		//贪婪与懒惰
+		//?号的另一种用途,a.*b，它将会匹配最长的以a开始，以b结束的字符串。如果用它来搜索aabab的话，它会匹配整个字符串aabab。这被称为贪婪匹配。
+		//*?	重复任意次，但尽可能少重复,
+		//a.*?b匹配最短的，以a开始，以b结束的字符串。如果把它应用于aabab的话，它会匹配aab（第一到第三个字符）和ab（第四到第五个字符）
+
+
+
+
+//正则表达式的方法，正则表达式是一个对象，有test方法，与search方法一样，只是返回true与false
+//reg.test(str)
+//str.search(reg)
+	}
+</script>

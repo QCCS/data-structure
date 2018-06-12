@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>图片上传兼容IE</title>  
+		<style>
+		#preview{width:260px;height:190px;border:1px solid red;overflow:hidden;}
+		#preview2{
+			width:260px;height:190px;border:1px solid red;overflow:hidden;
+		}
+		#imghead {filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=image);}
+		</style>
+<script>
+ 		//图片上传预览    IE是用了滤镜。
+        function previewImage(file){
+            var MAXWIDTH  = 260; 
+            var MAXHEIGHT = 180;
+            var div = document.getElementById('preview');
+            if (file.files && file.files[0]){
+                div.innerHTML ='<img id=imghead>';
+                var img = document.getElementById('imghead');
+                img.onload = function(){
+                var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+                img.width  =  rect.width;
+                img.height =  rect.height;
+                img.style.marginLeft = rect.left+'px';
+                img.style.marginTop = rect.top+'px';
+            }
+            var reader = new FileReader();
+            reader.onload = function(evt){img.src = evt.target.result;}
+            reader.readAsDataURL(file.files[0]);
+          }else{//兼容IE
+	            var sFilter='filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
+	            file.select();
+	            var src = document.selection.createRange().text;
+	            div.innerHTML = '<img id=imghead>';
+	            var img = document.getElementById('imghead');
+	            img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
+	            var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+	            status =('rect:'+rect.top+','+rect.left+','+rect.width+','+rect.height);
+	            div.innerHTML = "<div id=divhead style='width:"+rect.width+"px;height:"+rect.height+"px;margin-top:"+rect.top+"px;"+sFilter+src+"\"'></div>";
+	        }
+        }
+        function clacImgZoomParam( maxWidth, maxHeight, width, height ){
+            var param = {top:0, left:0, width:width, height:height};
+            if( width>maxWidth || height>maxHeight ){
+                rateWidth = width / maxWidth;
+                rateHeight = height / maxHeight;      
+                if( rateWidth > rateHeight ){
+                    param.width =  maxWidth;
+                    param.height = Math.round(height / rateWidth);
+                }else{
+                    param.width = Math.round(width / rateHeight);
+                    param.height = maxHeight;
+                }
+            }      
+            param.left = Math.round((maxWidth - param.width) / 2);
+            param.top = Math.round((maxHeight - param.height) / 2);
+            return param;
+        }
+        //----------------------------------------------
+        
+        function previewImage2(file){
+        	var warp_this=this;
+			var file=document.getElementById("file");
+		    var orimuse_design = new Image();
+			file.onchange=function () {
+				var files = this.files; // 获取文件列表
+				var reader = new FileReader(); //实例化FileReader对象，用于读取文件数据
+				for (var i = 0, length = files.length; i < length; i++) {
+					if (files[i].type.toLowerCase().match(/image.*/)) {// 正则判断文件类型是否为图片类型
+						reader.addEventListener('load', function (e) { // 监听FileReader实例的load事件
+							    orimuse_design.src =e.target.result;
+							    orimuse_design.onload=function(){ 
+							    	 console.log(orimuse_design);
+								}  
+						});
+				    reader.readAsDataURL(files[i]); 
+				    break;
+				    };
+				};
+			} 
+		   console.log("可上传图片");
+        }
+     
+        
+</script>     
+</head>     
+	<body>
+		<div id="preview"></div>
+		<input type="file" onchange="previewImage(this)" />  
+		
+		
+		<div id="preview2">
+			<img id="orimuse_design1" src="">
+		</div>
+		<input id="file" type="file" onchange="previewImage2(this)" />  
+	</body>     
+</html>

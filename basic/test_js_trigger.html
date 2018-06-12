@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #test_div{
+            width: 100px;
+            height: 100px;
+            border: solid;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+自动触发事件
+
+<input id="btn1" type="button" value="弹出1">
+<div id="test_div"></div>
+
+</body>
+</html>
+
+<script>
+
+    var btn1 = document.getElementById("btn1");
+    var test_div=document.getElementById("test_div");
+
+
+    //普通事件绑定测试
+    btn1.onclick = function (event) {
+        console.log(event.eventType)
+        console.log(event.type)
+    };
+    //这样可以自动触发
+    btn1.click();
+    //调用document对象的 createEvent 方法得到一个event的对象实例。
+    //var e = document.createEvent("MouseEvents");
+    var e1 = document.createEvent("HTMLEvents");
+    e1.initEvent("click", true, true);
+    e1.eventType = 'message';
+    btn1.dispatchEvent(e1);
+
+
+
+
+    //自定义事件测试
+    //创建事件对象
+    var e2 = document.createEvent("HTMLEvents");
+    //初始化事件
+    e2.initEvent("div_zoom", true, true);
+    //规定事件类型
+    e2.eventType = 'div_zoom';
+
+    //绑定自定义事件
+    test_div.addEventListener('div_zoom', function (event) {
+        alert(event.eventType);
+        console.log("当div的宽度变成200的时候,我们可以执行一些事情")
+    }, false);
+
+
+    //下面有触发自定义事件
+    var i=100;
+    setInterval(function(){
+        i++
+        test_div.style.width=i+"px";
+        if(i===200){
+            console.log(1)
+            test_div.dispatchEvent(e2);
+        }
+    },20)
+
+    //注意:
+    //自定义事件是无法自动触发的,因为浏览器是没有这个事件
+    //只能自己用js去触发,obj.dispatchEvent(事件对象);
+</script>

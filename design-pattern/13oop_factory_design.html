@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	 
+	</body>
+</html>
+<script>
+
+//定一个接口方法, 
+	var Interface = function(name,methods){
+					if(arguments.length != 2){
+						throw new Error('this instance interface constructor arguments must be 2 length!');
+					}
+					this.name = name ; 
+					this.methods = [] ; 
+					for(var i = 0,len = methods.length ; i <len ; i++){
+						 if( typeof methods[i] !== 'string'){
+						 		throw new Error('the Interface method name is error!');
+						 }
+						 this.methods.push(methods[i]);
+					}
+				}
+	Interface.ensureImplements = function(object){
+					if(arguments.length < 2 ){
+						throw new Error('Interface.ensureImplements method constructor arguments must be  >= 2!');
+					}
+					for(var i = 1 , len = arguments.length; i<len; i++ ){
+						var instanceInterface = arguments[i];
+						if(instanceInterface.constructor !== Interface){
+							throw new Error('the arguments constructor not be Interface Class');
+						}
+						for(var j = 0 ; j < instanceInterface.methods.length; j++){
+							var methodName = instanceInterface.methods[j];
+							if( !object[methodName] || typeof object[methodName] !== 'function' ){
+								throw new Error("the method name '" + methodName + "' is not found !");
+							}
+						}
+					}
+				}
+	//定义一个继承的方法
+	var self_extend=function(child,parent){//原型继承方法，如需继承非原型方法，用parent_obj.call(this,())//还能实现多继承
+				    var F = new Function();
+					F.prototype=parent.prototype;
+					child.prototype=new F();
+					child.prototype.constructor=child;
+					child.superClass=parent.prototype;
+					if(parent.prototype.constructor==Object.prototype.constructor){
+						parent.prototype.constructor=parent;
+					}
+		 }
+	
+	
+	//===================================================
+ 
+	 //设计模式,工厂模式
+	 //先搭建一个工厂环境
+//	function car_shop(){
+//		
+//	}
+//	 
+//	car_shop.prototype={
+//		constructor:car_shop,//还原构造器
+//		sell_car:function(type){//何种类型的车
+//			var car;
+//			switch(type){
+//				case "benz":car = new benz();break;
+//				case "bwm":car = new bwm();break;
+//				case "audi":car = new audi();break;
+//				default: "nothing to buy"
+//			}
+//			
+//			//检测车是否实现那个接口的方法
+//			Interface.ensureImplements(car,car_interface)//如果car有接口中给定的方法没有实现，就会报错
+//			return car;
+//		}
+//	}
+//	//定义车的接口,车必须实现的方法，
+//	var car_interface=new Interface('car_interface',["start","run"]);
+//	
+//	//定义几种车，根据接口，每辆车必须实现两个方法
+//	function benz(){};
+//	benz.prototype.start=function(){
+//		console.log("this is benz start")
+//	}
+//	//这个车先不实现这个方法
+//  benz.prototype.run=function(){
+// 		console.log("this is benz run")
+// 	}
+//	
+//	function bwm(){};
+//	bwm.prototype.start=function(){
+//		console.log("this is bwm start")
+//	}
+//	bwm.prototype.run=function(){
+//		console.log("this is bwm run")
+//	}
+//	
+//	function audi(){};
+//	audi.prototype.start=function(){
+//		console.log("this is audi start")
+//	}
+//	audi.prototype.run=function(){
+//		console.log("this is audi run")
+//	}
+//
+//	
+//	var shop=new car_shop();
+//	var car=shop.sell_car("benz");
+//	car.start();
+	 //car.run();
+	 
+	 
+	 
+	//利用继承更加简洁
+	//===================================================
+//	
+//	 //设计模式,工厂模式
+//	 //先搭建一个工厂环境
+//	function car_shop(){
+//		
+//	}
+//	car_shop.prototype={
+//		constructor:car_shop,//还原构造器
+//		sell_car:function(type){//何种类型的车
+//			var car;
+//			switch(type){
+//				case "benz":car = new benz();break;
+//				case "bwm":car = new bwm();break;
+//				case "audi":car = new audi();break;
+//				default: "nothing to buy"
+//			}
+//			//检测车是否实现那个接口的方法
+//			Interface.ensureImplements(car,car_interface)//如果car有接口中给定的方法没有实现，就会报错
+//			return car;
+//		}
+//	}
+//	//定义车的接口,车必须实现的方法，
+//	var car_interface=new Interface('car_interface',["start","run"]);
+//	//车的父类，只让这个类实现接口的方法，让子类继承
+//	function base_car(){
+//		
+//	}
+//	base_car.prototype={
+//		constructor:base_car,
+//		start:function(){
+//			//this.constructor是子类的构造方法，这容易理解，this.constructor.name表示构造函数的名字
+//			//这里实现了一个多态
+//			console.log(this.constructor.name+" this is start")
+//		},
+//		run:function(){
+//			console.log("this is running")
+//		}
+//	}
+//	//下面就方便了，可以直接继承
+//	function benz(){};
+//	self_extend(benz,base_car);
+//	//特殊方法，再加，但是要注意一点，特殊方法加，要加在self_extend()后面，不然会被继承中的方法破坏（覆盖）
+//	benz.prototype.drive_benz=function(){
+//		console.log("benz driver");
+//	}
+//	function bwm(){};
+//	self_extend(bwm,base_car);
+//	
+//	function audi(){};
+//	self_extend(audi,base_car);
+//
+//	var shop=new car_shop();
+//	var car=shop.sell_car("benz");
+//	car.start();
+//	car.run();
+//	car.drive_benz();//特殊方法
+	
+	
+	
+	//==================================================================
+	
+	 //设计模式,工厂模式
+	 //先搭建一个工厂环境
+	 //以上方式，买车的函数，有生产车的方法
+	 //最好进行分离，生产车，买车
+//	function car_shop(){
+//		
+//	}
+//	car_shop.prototype={
+//		constructor:car_shop,//还原构造器
+//		sell_car:function(type){//何种类型的车
+//			var car=create_car.create_car(type);
+//			return car;
+//		}
+//	}
+//	//定义一个生产车的函数,只管生产车，上面的car_shop就只管买车
+//	var create_car={
+//		create_car:function(type){
+//			var car;
+//			switch(type){
+//				case "benz":car = new benz();break;
+//				case "bwm":car = new bwm();break;
+//				case "audi":car = new audi();break;
+//				default: "nothing to buy"
+//			}
+//			//检测车是否实现那个接口的方法
+//			Interface.ensureImplements(car,car_interface)//如果car有接口中给定的方法没有实现，就会报错
+//			return car;
+//		}
+//	}
+//	
+//	//定义车的接口,车必须实现的方法，
+//	var car_interface=new Interface('car_interface',["start","run"]);
+//	//车的父类，只让这个类实现接口的方法，让子类继承
+//	function base_car(){
+//		
+//	}
+//	base_car.prototype={
+//		constructor:base_car,
+//		start:function(){
+//			//this.constructor是子类的构造方法，这容易理解，this.constructor.name表示构造函数的名字
+//			//这里实现了一个多态
+//			console.log(this.constructor.name+" this is start")
+//		},
+//		run:function(){
+//			console.log("this is running")
+//		}
+//	}
+//	//下面就方便了，可以直接继承
+//	function benz(){};
+//	self_extend(benz,base_car);
+//	//特殊方法，再加，但是要注意一点，特殊方法加，要加在self_extend()后面，不然会被继承中的方法破坏（覆盖）
+//	benz.prototype.drive_benz=function(){
+//		console.log("benz driver");
+//	}
+//	function bwm(){};
+//	self_extend(bwm,base_car);
+//	
+//	function audi(){};
+//	self_extend(audi,base_car);
+//
+//	var shop=new car_shop();
+//	var car=shop.sell_car("benz");
+//	car.start();
+//	car.run();
+//	car.drive_benz();//特殊方法
+	
+	
+	
+	//JavaScript抽象类
+	//复杂工厂模式的实现
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	//由子类车店买车
+	
+	 //设计模式,工厂模式
+	 //先搭建一个工厂环境
+	 //以上方式，买车的函数，有生产车的方法
+	 //最好进行分离，生产车，买车
+//	function car_shop(){//当成抽象类，里面的方法不应该被实现
+//		
+//	}
+//	car_shop.prototype={
+//		constructor:car_shop, 
+//		sell_car:function(type){ 
+//		   //当成抽象类,里面的方法不应该被实现
+//		   this.abstract_sell_car(type);
+//		},
+//		abstract_sell_car:function(){
+//			//throw new Error("this method is abstract");//JavaScript抽象方法
+//		}
+//	}
+//	//定义子类汽车店,抽象类的子类
+//	function benz_car_shop(){
+//		
+//	}
+//	self_extend(benz_car_shop,car_shop);//继承
+// 	benz_car_shop.prototype={
+// 		constructor:benz_car_shop,
+// 		sell_car:function(type){ //覆写父类的方法
+// 			 	  var car=create_car.create_car(type);
+// 		          return car;
+// 		   
+// 		}
+// 	}
+//	//定义一个生产车的函数,只管生产车，上面的car_shop就只管买车
+//	var create_car={
+//		create_car:function(type){
+//			var car;
+//			switch(type){//这个地方有点累赘
+//				case "benz":car = new benz();break;
+//				case "bwm":car = new bwm();break;
+//				case "audi":car = new audi();break;
+//				default: "nothing to buy";
+//			}
+//			//检测车是否实现那个接口的方法
+//			Interface.ensureImplements(car,car_interface)//如果car有接口中给定的方法没有实现，就会报错
+//			return car;
+//		}
+//	}
+//	
+//	//定义车的接口,车必须实现的方法，
+//	var car_interface=new Interface('car_interface',["start","run"]);
+//	//车的父类，只让这个类实现接口的方法，让子类继承
+//	function base_car(){
+//		
+//	}
+//	base_car.prototype={
+//		constructor:base_car,
+//		start:function(){
+//			//this.constructor是子类的构造方法，这容易理解，this.constructor.name表示构造函数的名字
+//			//这里实现了一个多态
+//			console.log(this.constructor.name+" this is start")
+//		},
+//		run:function(){
+//			console.log("this is running")
+//		}
+//	}
+//	//下面就方便了，可以直接继承
+//	function benz(){};
+//	self_extend(benz,base_car);
+//	//特殊方法，再加，但是要注意一点，特殊方法加，要加在self_extend()后面，不然会被继承中的方法破坏（覆盖）
+//	benz.prototype.drive_benz=function(){
+//		console.log("benz driver");
+//	}
+//	function bwm(){};
+//	self_extend(bwm,base_car);
+//	
+//	function audi(){};
+//	self_extend(audi,base_car);
+//	
+//	var shop1=new benz_car_shop();
+//	var car1=shop1.sell_car("benz");//多态用起来真的方便，传入什么类型，就是什么类型
+	//car1.start();
+	
+	
+	
+	
+	//=========================================================/
+	//由子类车店买车
+	
+	 //设计模式,工厂模式
+	 //先搭建一个工厂环境
+	 //以上方式，买车的函数，有生产车的方法
+	 //最好进行分离，生产车，买车
+//	function car_shop(){//当成抽象类，里面的方法不应该被实现
+//		
+//	}
+//	car_shop.prototype={
+//		constructor:car_shop, 
+//		sell_car:function(type){ 
+//		   //当成抽象类,里面的方法不应该被实现
+//		   this.abstract_sell_car(type);
+//		},
+//		abstract_sell_car:function(){
+//			//throw new Error("this method is abstract");//JavaScript抽象方法
+//		}
+//	}
+//	//定义子类汽车店,抽象类的子类
+//	function benz_car_shop(){
+//		
+//	}
+//	self_extend(benz_car_shop,car_shop);//继承
+// 	benz_car_shop.prototype={
+// 		constructor:benz_car_shop,
+// 		sell_car:function(type){ //覆写父类的方法
+// 			var car;
+// 			var types=["benz"];
+// 			for(t in types){
+// 				//如果这个商店有传入的汽车类型
+// 				if(types[t]===type){
+// 					car = create_car.create_car(type);
+// 				}else{
+// 					throw new Error("车店没有类型");
+// 				}
+// 			}
+// 			 return car;	 
+// 		   
+// 		}
+// 	}
+//	//定义一个生产车的函数,只管生产车，上面的car_shop就只管买车,车的工厂
+//	var create_car={
+//		create_car:function(type){
+//			//这里动态创建车，利用eval
+//			
+//			var car=eval('new '+type+' () ');//new 后加空格
+//			//不要switch语句
+// 
+//			Interface.ensureImplements(car,car_interface)//如果car有接口中给定的方法没有实现，就会报错
+//			return car;
+//		}
+//	}
+//	
+//	//定义车的接口,车必须实现的方法，
+//	var car_interface=new Interface('car_interface',["start","run"]);
+//	//车的父类，只让这个类实现接口的方法，让子类继承
+//	function base_car(){
+//		
+//	}
+//	base_car.prototype={
+//		constructor:base_car,
+//		start:function(){
+//			//this.constructor是子类的构造方法，这容易理解，this.constructor.name表示构造函数的名字
+//			//这里实现了一个多态
+//			console.log(this.constructor.name+" this is start")
+//		},
+//		run:function(){
+//			console.log("this is running")
+//		}
+//	}
+//	//下面就方便了，可以直接继承
+//	function benz(){};
+//	self_extend(benz,base_car);
+//	//特殊方法，再加，但是要注意一点，特殊方法加，要加在self_extend()后面，不然会被继承中的方法破坏（覆盖）
+//	benz.prototype.drive_benz=function(){
+//		console.log("benz driver");
+//	}
+//	function bwm(){};
+//	self_extend(bwm,base_car);
+//	
+//	function audi(){};
+//	self_extend(audi,base_car);
+//	
+//	var shop1=new benz_car_shop();
+//	var car1=shop1.sell_car("benz");//多态用起来真的方便，传入什么类型，就是什么类型
+//	car1.start();
+//	
+//	
+	//--------------------------------------------------
+	//去掉注释的版本
+	//
+
+	var create_car={//车的工厂类
+		create_car:function(type){
+			var car=eval('new '+type+' () ');//多态
+			Interface.ensureImplements(car,car_interface)
+			return car;
+		}
+	}
+	function car_shop(){//买车的父类
+	}
+	car_shop.prototype={
+		constructor:car_shop, 
+		sell_car:function(type){ 
+		   this.abstract_sell_car(type);
+		},
+		abstract_sell_car:function(){//抽象方法，子类实现
+			throw new Error("this method is abstract");
+		}
+	}
+	function benz_car_shop(){//各类汽车店，重写父类的方法
+	}
+	self_extend(benz_car_shop,car_shop);
+ 	benz_car_shop.prototype={
+ 		constructor:benz_car_shop,
+ 		sell_car:function(type){//覆盖父类的方法
+ 			var car;
+ 			var types=["benz"];
+ 			for(t in types){
+ 				if(types[t]===type){
+ 					car = create_car.create_car(type);
+ 				}else{
+ 					throw new Error("车店没有类型");
+ 				}
+ 			}
+ 			 return car;	 
+ 		}
+ 	}
+	//车实现两个方法，然后四种子类汽车继承
+	var car_interface=new Interface('car_interface',["start","run"]);
+	function base_car(){
+	}
+	base_car.prototype={
+		constructor:base_car,
+		start:function(){
+			console.log(this.constructor.name+" this is start")
+		},
+		run:function(){
+			console.log("this is running")
+		}
+	}
+	function benz(){};
+	self_extend(benz,base_car);//继承父类
+	benz.prototype.drive_benz=function(){
+		console.log("benz driver");
+	}
+	function bwm(){};
+	self_extend(bwm,base_car);
+
+	function audi(){};
+	self_extend(audi,base_car);
+	
+	var shop1=new benz_car_shop();
+	var car1=shop1.sell_car("benz");//多态
+	car1.start();
+	//JavaScript实现java中的|接口|继承|抽象类|继承|多态|对象|工厂模式|重写|重载|
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

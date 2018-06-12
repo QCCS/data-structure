@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+</body>
+</html>
+
+<script>
+
+    //责任链模式
+    //发送者知道链中的第一个接收者，他向这个接收者发出请求
+    // 每一个接收者都对请求进行分析，要么处理他，要么往下传递
+    // 每一个接收者知道的其他对象只有一个，即它的下家对象
+    // 如果没有任何接收者处理请求，那么请求将从链上离开，不同的实现对此有不同的反应
+
+
+
+    //模拟做项目的场景
+    // //send_task=>项目组
+    //
+    // //任务的类(发送者)
+    // var assign=function(task){
+    // 	this.task=task;
+    // }
+    // //接受任务的类
+    // var work_flow=function(assign){
+    // 	this.assign=assign;
+    // }
+    // work_flow.prototype={
+    // 	constructor:work_flow,
+    // 	filter_fn:function(es){//分析谁能去做,参数是所有的接受者
+    // 		for(var i=0;i<es.length;i++){
+    // 			if(this.assign.task==es[i].cando){//如果能做
+    // 				return es[i].todo();
+    // 			}
+    // 		}
+    // 		return;
+    // 	}
+    // }
+    // //处理者
+    // var executor=function(name,cando){
+    // 	this.name=name;
+    // 	this.cando=cando;
+    // }
+    // executor.prototype={
+    // 	constructor:executor,
+    // 	todo:function(){
+    // 		console.log(this.name+"开发："+this.cando)
+    // 	}
+    // }
+    //
+    // //实例化四个处理者
+    // var e1=new executor("p1","javascript");
+    // var e2=new executor("p2","css");
+    // var e3=new executor("p3","javs");
+    // var e4=new executor("p4","sql");
+    //
+    // //实例化任务
+    // var assign1=new assign("javs");
+    //
+    // //处理任务
+    // var work_flow1=new work_flow(assign1);
+    // work_flow1.filter_fn([e1,e2,e3,e4]);//处理任务的小组，filter_fn会自动分析出由哪一个人去执行
+    //
+
+    //=====================================================================
+
+    //work_flow1.filter_fn([e1,e2,e3,e4]);传入的是一个数组，代表一个工作小组
+    //我们需要需改这个函数，改为work_flow1.filter_fn(e1)，如果e1这个对象能执行，就执行，如果不能执行
+    //就交个其他对象
+
+    var assign=function(task){
+        this.task=task;
+    }
+    //接受任务的类
+    var work_flow=function(assign){
+        this.assign=assign;
+    }
+    work_flow.prototype={
+        constructor:work_flow,
+        filter_fn:function(es){//分析谁能去做,参数小组的其中一个人
+            if(this.assign.task===es.cando){
+                return es.todo();
+            }else{
+                //向下传递
+                arguments.callee.call(this,es.successor);
+            }
+        }
+    }
+    //处理者
+    var executor=function(name,cando){
+        this.name=name;
+        this.cando=cando;
+        this.successor=null;//保留当前接收者下一个对象引用
+    }
+    executor.prototype={
+        constructor:executor,
+        todo:function(){
+            console.log(this.name+"开发："+this.cando)
+        },
+        set_successor:function(successor){//与this.successor对应
+            this.successor=successor;
+        }
+    }
+
+    //实例化四个处理者
+    var e1=new executor("p1","javascript");
+    var e2=new executor("p2","css");
+    var e3=new executor("p3","javs");
+    var e4=new executor("p4","sql");
+
+    //下面去设置责任链关系
+    e1.set_successor(e2);
+    e2.set_successor(e3);
+    e3.set_successor(e4);
+
+    //实例化任务
+    var assign1=new assign("javs");
+
+    //处理任务
+    var work_flow1=new work_flow(assign1);
+    work_flow1.filter_fn(e1);//处理任务的小组，filter_fn会自动分析出由哪一个人去执行
+
+</script>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			.tag{
+				width: 100px;
+				height: 30px;
+				background: goldenrod;
+				margin: 10px;
+				float: left;
+			}
+			.clear{
+				clear: both;
+			}
+			#warp{
+				width: 900px;
+				height: 400px;
+				border: solid;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="tag_warp">
+			<div class="tag">tag1</div>
+			<div class="tag">tag2</div>
+			<div class="tag">tag3</div>
+			<div class="tag">tag4</div>
+			<div class="tag">tag5</div>
+			
+			<div class="tag">tag6</div>
+			<div class="tag">tag7</div>
+			<div class="tag">tag8</div>
+			<div class="tag">tag9</div>
+			<div class="tag">tag10</div>
+			<div class="clear"></div>
+		</div>
+		<div id="warp"></div>
+	</body>
+</html>
+<script>
+	
+	tag_warp.onclick=function(e){
+		if(test_warp(e.target.innerHTML)){
+			creat_tag(warp,"tag",e.target.innerHTML);
+		}
+	}
+	function test_warp(inner_content){
+		var inner_nodes=warp.getElementsByClassName("tag");
+		if(inner_nodes.length<3&&test_common(inner_nodes,inner_content)){
+			return true;
+		}
+	}
+	function test_common(arr,str){
+		 for(var i=0;i<arr.length;i++){
+		 	if(arr[i].innerHTML==str){
+		 		return false;
+		 	}
+		 }
+	 return true;
+	}
+	function creat_tag(parent_node,child_class_name,inner_content){
+		var new_el=document.createElement("div");
+		new_el.innerHTML=inner_content;
+		new_el.className=child_class_name;
+		parent_node.appendChild(new_el);
+	}
+	+function dele_tag(){
+		warp.onclick=function(e){
+		    if(e.target.getAttribute("id")){
+				return;
+			}
+			e.target.parentNode.removeChild(e.target);
+		}
+	}()
+</script>

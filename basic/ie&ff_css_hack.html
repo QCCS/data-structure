@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ol>
+    <li>
+        FF: div 设置 margin-left, margin-right 为 auto 时已经居中, IE 不行
+    </li>
+    <li>
+        FF: body 设置 text-align 时, div 需要设置 margin: auto(主要是 margin-
+        left,margin-right) 方可居中
+    </li>
+    <li>
+        FF: 设置 padding 后, div 会增加 height 和 width, 但 IE 不会, 故需要用 !
+        important 多设一个 height 和 width
+    </li>
+    <li>
+        FF: 支持 !important, IE 则忽略, 可用 !important 为 FF 特别设置样式，值得注
+        意的是，一定要将xxxx !important 这句放置在另一句之上
+    </li>
+    <li>
+        div 的垂直居中问题: vertical-align:middle; 将行距增加到和整个DIV一样高
+        line-height:200px; 然后插入文字，就垂直居中了。缺点是要控制内容千万不要换行。
+
+    </li>
+    <li>
+        cursor: pointer 可以同时在 IE FF 中显示游标手指状， hand 仅 IE 可以
+
+    </li>
+    <li>
+        FF: 链接加边框和背景色，需设置 display: block, 同时设置 float: left 保证不
+        换行。参照 menubar, 给 a 和 menubar 设置高度是为了避免底边显示错位, 若不设
+        height, 可以在 menubar 中插入一个空格。
+    </li>
+    <li>
+        在mozilla firefox和IE中的BOX模型解释不一致导致相差2px解决方法：div
+        {margin:30px!important;margin:28px;}  注意这两个margin的顺序一定不能写反，据
+        阿捷的说法!important这个属性IE不能识别，但别的浏览器可以识别。所以在IE下其实
+        解释成这样：div{maring:30px;margin:28px}
+        重复定义的话按照最后一个来执行，所以不可以只写margin:XXpx!important;
+
+    </li>
+    <li>
+        float属性的div同级，之间不能存在嵌套关系，否则会产生异常。
+        　　并且将clear这种样式定义为如下即可：.clear{clear:both;}
+        　　此外，为了让高度能自动适应，要在wrapper里面加上overflow:hidden;
+        　　当包含float的box的时候，高度自动适应在IE下无效，这时候应该触发IE的layout
+        私有属性(万恶的IE啊!)用zoom:1;可以做到，这样就达到了兼容。
+        　　例如某一个wrapper如下定义：.colwrapper{
+        　　overflow:hidden;
+        　　zoom:1;
+        　　margin:5px auto;}
+
+    </li>
+    <li>
+        margin加倍的问题。
+        　　设置为float的div在ie下设置的margin会加倍。这是一个ie6都存在的bug。
+        　　解决方案是在这个div里面加上display:inline;
+        　　例如：
+        　　 #div id=\”imfloat\”>
+        　　相应的css为
+        　　#IamFloat{
+        　　float:left;
+        　　margin:5px;/*IE下理解为10px*/
+        　　display:inline;/*IE下再理解为5px*/}
+
+    </li>
+
+
+    <li>
+        很多时候，尤其是容器内有平行布局，例如两、三个float的div时，宽度很容易出
+        现问题。在IE中，外层的宽度会被内层更宽的div挤破。一定要用Photoshop或者
+        Firework量取像素级的精度。
+
+</li>
+    <li>
+        如果是动态地添加内容，高度最好不要定义。浏览器可以自动伸缩，然而如果是静
+        态的内容，高度最好定好。(似乎有时候不会自动往下撑开，不知道具体怎么回事)
+
+    </li>
+    <li>
+        CSS透明
+        IE：filter:progidXImageTransform.Microsoft.Alpha(style=0,opacity=60)。
+        FF：opacity:0.6。
+
+    </li>
+    <li>
+        IE：不支持圆角。
+        FF： -moz-border-radius:4px，或者
+        -moz-border-radius-topleft:4px;
+        -moz-border-radius-topright:4px;
+        -moz-border-radius-bottomleft:4px;
+        -moz-border-radius- bottomright:4px;。
+
+    </li>
+    <li>
+        CSS双线凹凸边框
+        IE：border:2px outset;。
+        FF：
+        -moz-border-top-colors: #d4d0c8 white;
+        -moz-border-left-colors: #d4d0c8 white;
+        -moz-border-right-colors:#404040 #808080;
+        -moz-border-bottom-colors:#404040 #808080;
+
+
+    </li>
+    <li>禁止选取网页内容
+        在IE中一般用js：obj.onselectstart=function(){return false;};
+        而firefox用CSS:-moz-user-select:none;
+
+    </li>
+
+</ol>
+
+</body>
+</html>

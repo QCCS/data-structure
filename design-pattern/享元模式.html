@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+</body>
+</html>
+<script>
+    //享元模式：优化的设计模式
+    //出厂商，型号，出厂日期，拥有者，车牌号，登记日期
+    //原理:把相同部分的静态变量封装起来，在创建新对象的时候，不要再次创建
+    //
+    //	var car=function(make,model,year,owner,tag,renew_date){
+    //		this.make=make;
+    //		this.model=model;
+    //		this.year=year;
+    //		this.owner=owner;
+    //		this.tag=tag;
+    //		this.renew_date=renew_date;
+    //	}
+    //	car.prototype={
+    //		constructor:car,
+    //		get_make:function(){
+    //			return this.make;
+    //		},
+    //		get_model:function(){
+    //			return this.model
+    //		},
+    //		get_year:function(){
+    //			return this.year;
+    //		},
+    //		get_renew_date:function(new_renew_date){
+    //			this.year=new_renew_date;
+    //		}
+    //	}
+    //
+    //	//创建很多车
+    //	var arr=[];
+    //	var s_time=new Date().getTime();
+    ////	for(var i=0;i<5000000;i++){
+    ////		arr.push(new car("上海大众","迈腾","2012-2","zhou","bj100-1","2016-1"));
+    ////	}
+    //	var e_time=new Date().getTime();//3167毫秒，内存也占有巨大
+    //	console.log(e_time-s_time);
+
+    //==============================================
+    //享元模式：前三个内在数据（static）,后三个外在数据
+    var car=function(make,model,year){
+        this.make=make;
+        this.model=model;
+        this.year=year;
+
+    };
+    car.prototype={
+        constructor:car,
+        get_make:function(){
+            return this.make;
+        },
+        get_model:function(){
+            return this.model
+        },
+        get_year:function(){
+            return this.year;
+        }
+    };
+
+    //利用比一个闭包工厂模式:创建车的静态属性
+    var car_factory=(function(){//外部无法访问
+        var create_cars={};
+        return {//对外接口
+            create_car:function(make,model,year){
+                if(create_cars[make+model+year]){//如果已经存在
+                    return create_cars[make+model+year];
+                }else{
+                    var car1=new car(make,model,year);
+                    create_cars[make+model+year]=car1;
+                    return car1;
+                }
+            }
+        }
+    })();
+
+    //在利用单体模式把外在数据与内在数据结合起来
+    var car_record=(function(){
+        var car_record_base={};
+        return {
+            add_car_record:function(make,model,year,owner,tag,renew_date){
+                var car_=car_factory.create_car(make,model,year);
+                car_record_base[tag]={
+                    owner:owner,
+                    renew_date:renew_date,
+                    car_:car_
+                };
+            },
+            get_renew_date:function(tag,new_renew_date){
+                car_record_base[tag].renew_date=new_renew_date;
+            }
+        }
+    })()
+    //创建很多车
+    var arr=[];
+    var s_time=new Date().getTime();
+    for(var i=0;i<5000000;i++){
+        arr.push(car_record.add_car_record("上海大众","迈腾","2012-2","zhou","bj100-1","2016-1"));
+    }
+    var e_time=new Date().getTime();//10236毫秒，内存小
+    console.log(e_time-s_time);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+

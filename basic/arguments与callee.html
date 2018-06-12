@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+</html>
+<script>
+ 	
+   //arguments对象 
+   //var numargs = arguments.length;     // 获取被传递参数的数值。
+   //var expargs = function_name.length;       // 获取期望参数的数值。
+      
+	function callerDemo() {
+	      if (callerDemo.caller) {
+	        var a= callerDemo.caller.toString();
+	          alert(a);
+	      } else {
+	          alert("this is a top function");
+	      }
+	}
+	//callerDemo();//不会有callerDemo.caller
+	 
+	function handleCaller() {
+	      callerDemo();//有callerDemo.caller
+	}
+	 //handleCaller();
+	 
+	 
+	//=====================================
+	 //callee的用法
+	 
+	 //callee可以打印其本身
+	function calleeDemo(str){
+		console.log(str)
+		//arguments.callee("ss");//这个可以调用自己函数
+	    console.log(arguments.callee);
+	}
+	//calleeDemo("Aa")
+	
+	
+	//用于验证参数
+	function calleeLengthDemo(arg1, arg2) {
+	    if (arguments.length==arguments.callee.length) {
+	        console.log("验证形参和实参长度正确！");
+	        return;
+	      } else {
+	      	//可以利用arguments.callee.length与arguments.length比较判断实参与形参长度
+	          console.log("实参长度：" +arguments.length);
+	          console.log("形参长度： " +arguments.callee.length);
+	      }
+	}
+	
+	//calleeLengthDemo("arg1")
+	
+	//递归计算
+	var sum = function(n){
+	 	if (n <= 0) {
+			return 1;
+		}else{
+			return n * arguments.callee(n - 1);
+		}    
+	}
+	//比较一般的递归函数：
+	var sum_ = function(n){
+	    if (1==n) {
+	      return 1;	
+	    } else {
+	    	return n * sum_ (n-1);
+	    }
+	}
+//	console.log( sum(5))
+//	console.log(sum_(10))
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+
+<script>
+
+    //第一个字母转大写
+    function toUpperCase_first(str){
+        var reg = /\b(\w)|\s(\w)/g;
+        return str.replace(reg,function(m){
+            return m.toUpperCase()
+        });
+    }
+
+
+
+
+
+
+
+
+
+    //抽象工厂在普通工厂模式上多增加了一层
+    //普通工厂模式你向工厂要要东西
+    //抽象工厂是你向某个管理工厂的单位要工厂
+
+    function Car() {
+        console.log("这个是车的工厂");
+    }
+    function Computer() {
+        console.log("这个是电脑的工厂");
+    }
+    function Mobile() {
+        console.log("这个是手机的工厂");
+    }
+
+    //这个生成机械的工厂
+    function factory1(name) {
+        return eval('new '+toUpperCase_first(name)+'()');
+    }
+
+
+    function Cat() {
+        console.log("这个是猫的工厂");
+    }
+    function Dog() {
+        console.log("这个是狗的工厂");
+    }
+    function Fish() {
+        console.log("这个是鱼的工厂");
+    }
+
+    //这个生成动物的工厂
+    function factory2(name) {
+        return eval('new '+toUpperCase_first(name)+'()');
+    }
+
+
+    //然后又一个单位,管理这两个工厂
+    function manage(factory_name,name){
+        if(factory_name==="machine"){
+            return factory1(name);
+        }else if(factory_name==="animal"){
+            return factory2(name);
+        }
+    }
+
+
+
+//使用
+
+    manage("machine","Mobile")
+    manage("animal","fish")
+
+
+
+</script>

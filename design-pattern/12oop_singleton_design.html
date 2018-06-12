@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	 
+	</body>
+</html>
+<script>
+
+//单体模式
+//单体不能被实例
+//简单单体模式
+	var singletou={
+		attr1:true,
+		attr2:10,
+		method1:function(){
+			alert("我是方法1")
+		},
+		method2:function(){
+			alert("我是方法2")
+		}
+	};	
+//alert(singletou.attr1)
+	  //命名空间
+	  var bhx={};
+	  bhx.singletou1={
+			attr1:true,
+			attr2:10,
+			method1:function(){
+				alert("我是方法1")
+			},
+			method2:function(){
+				alert("我是方法2")
+			}
+		};
+	 //bhx.singletou1.method2()
+	//闭包（function（）{}）（）这样写函数，可以不调用，而被直接执行
+	var bhx2={};
+	bhx2.singletou2=(function(){
+		//这里最大的好处就是可以添加私有变量，保护内部数据
+		//这里的数据不受外界干扰
+		var a1=true;
+		var a2=10;
+		var f1=function(){
+			alert("f1");
+		}
+		var f2=function(){
+			alert("f2");
+		}
+		return {
+			attr1:a1,
+			attr2:a2,
+			method1:function(){
+				return f1();
+			},
+			method2:function(){
+				return f2();
+			}
+		}
+	})() 
+	 //bhx2.singletou2.method1()
+	 //惰性单体
+	 var zl={};
+	 zl.base=(function(){
+	 	//按需返回，多一个私有变量，控制返回的单体对象
+		var uniq_instance;
+		//还需要一个构造方法
+		function init(){
+			var a1=true;
+			var a2=10;
+			var f1=function(){
+				alert("f1");
+			}
+			var f2=function(){
+				alert("f2");
+			}
+			return {
+				attr1:a1,
+				attr2:a2,
+				method1:function(){
+					return f1();
+				},
+				method2:function(){
+					return f2();
+				}
+			}
+		}
+		return {
+			get_instance:function(){
+				if(!uniq_instance){//如果不存在
+					uniq_instance=init();
+				}
+				return uniq_instance;
+			}
+		}
+	 })()
+	// console.log(zl.base.get_instance().attr1);
+	
+	//分支单体，浏览器检测
+	var browser={};
+	var def=true;//这里可以是一个数组，依次表示下面每一个对象
+	browser.more=(function(){
+		var obj_a={};//火狐浏览器属性
+		var obj_b={};//chrome浏览器属性
+		
+		return (def)?obj_a:obj_b;
+	})()
+	
+//	 var i;
+//	 var n=null;
+//	 console.log(i);//undefined
+//	 console.log(n);//null
+//	 console.log(typeof i);//undefined
+//	 console.log(typeof n)//object
+//	 console.log(!i);//true
+//	 console.log(!n);//true
+//	 console.log(new Boolean(i));//false
+//	 console.log(new Boolean(n));//false
+	 //console.log(m);//导致程序出错
+	
+</script>

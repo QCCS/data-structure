@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+
+<script>
+
+    //第一个字母转大写
+    function toUpperCase_first(str){
+        var reg = /\b(\w)|\s(\w)/g;
+        return str.replace(reg,function(m){
+            return m.toUpperCase()
+        });
+    }
+    //简单实验工厂模式
+
+    //工厂生产不同对象的方法:可以挂在一个对象上
+    function Car() {
+        console.log("这个是车的工厂");
+    }
+    function Computer() {
+        console.log("这个是电脑的工厂");
+    }
+    function Mobile() {
+        console.log("这个是手机的工厂");
+    }
+
+
+    //创建一个工厂
+    function factory(name) {
+        if (name === "car") {
+            return new Car();
+        }
+        else if (name === "computer") {
+            return new Computer();
+        }
+        else if (name === "mobile") {
+            return new Mobile();
+        }else {
+            console.log("无法创建这个类型")
+        }
+    }
+//以上的工厂方法,可以合并一个,js利用Function与eval函数
+    //可以实现这一点;
+    function factory1(name) {
+        return eval('new '+toUpperCase_first(name)+'()');
+    }
+
+
+
+
+    //使用这个工厂
+    var car=factory("car");
+    var car1=factory1("car");
+    var mobile=factory1("mobile");
+
+    console.log(car);
+    console.log(car1);
+
+</script>

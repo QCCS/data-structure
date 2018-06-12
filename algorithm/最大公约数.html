@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+</body>
+</html>
+<script>
+    //输入大小的数
+    function gcd(a, b) {
+        if (b == 0) return a;
+        var r = parseInt(a % b);
+        return gcd(b, r);
+    }
+
+    console.log(gcd(18, 4));
+</script>

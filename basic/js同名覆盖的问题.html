@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+
+<script>
+    //    var add=function(a,b){
+    //        console.log(a+b)
+    //    }
+    //
+    //    function add(a,b){
+    //        console.log(a-b)
+    //    }
+    //
+    //    //这里输出5,指向匿名函数不会被覆盖
+    //    add(4,1);
+
+    //    function add(a, b) {
+    //        console.log(a - b)
+    //    }
+    //    var add = function (a, b) {
+    //        console.log(a + b)
+    //    }
+    //    //这里输出5,
+    ////    函数变量与一般变量等价,后面的变量覆盖前面的变量了
+    //    add(4, 1);
+
+    //
+    //    function add(a, b) {
+    //        console.log(a - b)
+    //    }
+    //    var add=3;
+    //
+    //    //这里就会报错了,因为add函数被覆盖了,无法执行了
+    //    add(4, 1);
+
+
+    //    var add=3;
+    //    function add(a, b) {
+    //        console.log(a - b)
+    //    }
+    //    //这里就会报错了,函数名无法覆盖变量
+    //    add(4, 1);
+
+    //    var add = 3;
+    //    var add = function (a, b) {
+    //        console.log(a - b)
+    //    }
+    //    //变量与函数都是定义的变量名,后者就会覆盖前者
+    //    add(4, 1);
+
+
+    //以上的原理就是js的解析原理,一切的变量提前声明
+    //--------------分割线----------
+    var a = 0;
+    var f = function () {
+        a = 1;
+    }
+    f();
+    console.log(a);//输出1
+    function f() {
+        a = 22;
+    }
+    f();
+    console.log(a);//输出1
+    //--------------分割线----------
+    //在浏览器中,上面这段代理是这样的被认为的;
+    var a;
+    var f;
+    function f(){//因为function也是关键字
+        a = 22;
+    }
+    a=0;
+    f=function(){
+        a=1;
+    }
+    //以上声明过程完毕,下面就执行了
+    f();
+    console.log(a);//输出1
+    f();
+    console.log(a);//输出1
+
+    // 也就是说a=2的f函数被覆盖了
+    //这里也说明了一个问题,就是把最外层的函数看着是一个闭包是有问题的,
+    //因为在最外层受到浏览器解析的影响
+
+</script>

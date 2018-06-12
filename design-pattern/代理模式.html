@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+
+</body>
+</html>
+
+<script>
+    //代理模式
+    //控制对对象的访问，节制对本体对象的访问
+    //模拟图书馆借书还书
+
+    var library=function(books){
+        this.books=books;
+    }
+    var book=function(id,title,author){
+        this.id=id;
+        this.title=title;
+        this.author=author;
+    }
+    library.prototype={//定义图书馆的属性
+        constructor:library,//还原构造器
+        add_book:function(){
+
+        },
+        find_book:function(){
+
+        },
+        checkout_book:function(){
+
+        },
+        return_book:function(){
+
+        }
+    }
+
+    var library_proxy=function(books){
+        console.log("实例代理对象");
+        this.books=books;
+        this.library=null;
+    }
+
+    library_proxy.prototype={//定义图书馆的属性
+        constructor:library,//还原构造器
+        initialize_library:function(){
+            console.log("实例本体对象");
+            if(this.library==null){
+                this.library=new library(this.books);
+            }
+        },
+        add_book:function(){
+            this.initialize_library();
+            console.log("add_book");
+        },
+        find_book:function(){
+
+        },
+        checkout_book:function(){
+
+        },
+        return_book:function(){
+
+        }
+    }
+
+    var proxy=new library_proxy({//实例化代理对象
+        "01":new book("01","java","zh")
+    })
+    //proxy.add_book();//再真正调用本体对象前，没有实例本体对象
+</script>

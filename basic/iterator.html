@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+</body>
+</html>
+
+<script>
+
+    //javascript迭代器:6种
+    //some
+    //every
+    //forEach
+    //map
+    //filter
+    //reduce
+
+    //测试
+    var arr=[1,2,3,433,77];
+
+
+    //forEach:无返回值
+    //操作元素:forEach接受一个函数作为参数,
+    arr.forEach(function(item){
+        console.log(item);
+    });
+
+
+    //every:返回判断结果
+    //操作元素:对所有的元素返回true,则该方法返回true
+    var re_every=arr.every(function(item){
+        return item%2===0;
+    });
+    console.log(re_every)
+
+
+    //some:返回判断结果
+    //操作元素:对一个的元素返回true,则该方法返回true
+    var re_some=arr.some(function(item){
+        return item%2===0;
+    });
+    console.log(re_some);
+
+
+    //rudece:返回累加:从左边开始加
+    //reduceRight:从右边加
+    //操作元素:不断累加数值,直到最后一个数:只有第一次传入数组前两个元素;
+    // 之后第一个参数是上一次的相加结果,第二个参数是数组的下一个元素,依次到最后
+    var re_reduce=arr.reduce(function(total,current){
+        return total+current;
+    })
+    console.log(re_reduce);
+
+
+
+    //filter:返回新数组
+    //操作数组:对每一个元素进行操作,传入一个函数,对返回是true的元素,添加到新的函数
+    var re_filter=arr.filter(function(item){
+        return item%2===0;
+    })
+    console.log(re_filter);
+
+
+
+    //map:返回新数组
+    //操作数组:映射为一个新数组
+    var re_map=arr.map(function(item){
+        return item=item+1;
+    })
+    console.log(re_map);
+
+    //如何记忆
+    //分两个大类:操作数组(map-filter)与操作数组元素(forEach-every-some-reduce)
+    //除了forEach没有返回值,其他皆有返回值
+
+
+
+</script>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src="js/jquery-1.11.2.min.js" ></script>
+</head>
+<body>
+<input id="inp" value="i am data" type="button" />
+</body>
+</html>
+<script>
+    //桥模式，代码不复杂，完全是一种思想
+    window.onload=function(){
+        //桥接模式：现实与抽象分离开，使他们可以完全独立变化
+
+        //事件监听，回调机制
+//		var inp=document.getElementById("inp");
+//
+//		inp.addEventListener("click",aa,false);//false表示正常冒泡机制，从内向外，
+//
+//		function aa(){
+//			console.log(this.value);
+//			inp.removeEventListener("click",aa,false);//只是执行一次，在这里取消
+//		}
+//==========================================================================
+
+
+
+
+
+
+        var inp=document.getElementById("inp");
+
+        inp.addEventListener("click",bridge,false);//false表示正常冒泡机制，从内向外，
+        //1前端业务逻辑
+        //========================================================	利用桥接模式使其独立
+        //利用桥接模式使其独立
+        function bridge(){
+            var msg=this.value;//绑定的对象改变一下，刚才前后耦合在一起，现在减少耦合，
+            send_back(msg)
+        }
+        //单元测试的时候，后台，前端可以独立测试
+        //2后台业务逻辑
+        function send_back(msg){
+            console.log(msg);
+            inp.removeEventListener("click",send_back,false);//只是执行一次，在这里取消
+        }
+
+
+        //特权函数
+        //下面就是桥接模式的特权函数
+        var public_class=function(){
+
+            var name="zhang_san";
+            this.get_name=function(){
+                console.log(name);
+                return name;
+            }
+        }
+
+        var p1=new public_class();
+        //p1.get_name();
+
+        var public_class2=function(){
+            var private_get_name=function(){
+                console.log("私有方法");
+
+            };
+            //特权函数，使用上面的函数
+            this.bridge_get_name=function(){
+                return private_get_name();
+            }
+        }
+        var p2=new public_class2();
+        p2.bridge_get_name();
+    }
+</script>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+</html>
+<script>
+	
+	window.onload=function(){
+		
+		var aa=function(){
+			this.say1=function(){
+				console.log("我是aa的方法1");
+			}
+			this.say2=function(){
+				console.log("我是aa的方法2");
+			}
+			
+			this.say3=function(){
+				console.log("我是aa的方法3");
+			}
+			this.say4=function(){
+				console.log("我是aa的方法4");
+			}
+		}
+		
+		var bb=function(){
+			aa.call(this);
+			this.say_name1=function(){
+				console.log("我是bb的方法1");
+			}
+			this.say_name2=function(){
+				console.log("我是bb的方法2");
+			}
+			this.say_name3=function(){
+				console.log("我是bb的方法3");
+			}
+			this.say_name4=function(){
+				console.log("我是bb的方法4");
+			}
+		}
+		var cc=function(){//继承了aa与bb的所有方法
+			bb.call(this);
+		};
+ 
+ 
+		 	
+		(function aa(window){
+			
+			function _zl(){
+				
+			}
+		 	window.zl=_zl;//与外界产生关系
+		 	_zl.go_begin=function(fn){
+		 	 	fn();
+		 	}
+		 })(window)
+		
+		zl.go_begin(function(){
+			console.log(1);
+		});
+
+
+	}
+
+	 
+</script>

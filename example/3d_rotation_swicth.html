@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			#warp{/*定位需要*/
+				width: 200px;
+				height: 300px;
+				background: yellowgreen;
+				position: relative;
+			}
+			.div1,.div2,.div1_stop,.div2_stop{
+				font-size: 50px;
+				line-height: 200px;
+				text-align: center;
+				vertical-align: middle;
+				color: red;
+			}
+			.div1{
+				position: absolute;
+				width: 200px;
+				height: 300px;
+				background: white;
+				z-index: 2; /*默认情况下前面显示在上面*/ 	 
+			}
+			.div1_stop{
+				position: absolute;
+				width: 200px;
+				height: 300px;
+				background: white;
+				z-index: 1; /*已经旋转180度*/ 
+				-webkit-transform: perspective(3000px) rotateY(180deg);
+		        transform: perspective(3000px) rotateY(180deg); 
+		     
+			}
+			.div2{/*默认旋转了180度*/
+				position: absolute;
+				width: 200px;
+				height: 300px;
+				background: white;
+				z-index: 1;/*默认情况下后面显示在下面*/
+				-webkit-transform: perspective(3000px) rotateY(180deg);
+		        transform: perspective(3000px) rotateY(180deg); 
+		       
+			}
+			.div2_stop{ /*背面转正*/
+				position: absolute;
+				width: 200px;
+				height: 300px;
+				background: white;
+				z-index: 2; 
+			 
+			}
+			
+	/*动画公共属性*/
+			.animated {
+				animation-timing-function: linear;
+				-webkit-animation-timing-function: linear;/* Safari 和 Chrome: */
+				-moz-animation-timing-function: linear;/* Firefox: */
+				-webkit-animation-duration: 1s;/*1s*/
+				animation-duration: 1s;/*1s*/
+				-webkit-animation-fill-mode: both;
+				animation-fill-mode: both
+			}
+			/*-------------------------------------------*/
+			/*前面旋转到180*/
+			
+			@-webkit-keyframes front_to_back{
+				0% {
+					-webkit-transform: perspective(3000px) rotateY(0deg);
+					transform: perspective(3000px) rotateY(0deg); 
+					z-index: 2;
+				}
+				50%{
+					z-index: 2;
+				}
+				51%{
+					z-index: 1;
+				}
+				100% {
+					-webkit-transform: perspective(3000px) rotateY(180deg);
+					transform: perspective(3000px) rotateY(180deg);
+					z-index: 1;
+				}
+			}
+			.front_to_back {
+				-webkit-backface-visibility: visible!important;
+				-ms-backface-visibility: visible!important;
+				backface-visibility: visible!important;
+				-webkit-animation-name: front_to_back;
+				animation-name: front_to_back
+			}
+			
+			/*前面旋转到180*/
+			/*前面转回来*/
+			@-webkit-keyframes front_come_back {
+				0% {
+					-webkit-transform: perspective(3000px) rotateY(180deg);
+					transform: perspective(3000px) rotateY(180deg); 
+					z-index: 1;
+				}
+				50%{
+					z-index: 1;
+				}
+				51%{
+					z-index: 2;
+				}
+				100% {
+					-webkit-transform: perspective(3000px) rotateY(0deg);
+					transform: perspective(3000px) rotateY(0deg);
+					z-index: 2;
+				}
+			}
+			.front_come_back {
+				-webkit-backface-visibility: visible!important;
+				-ms-backface-visibility: visible!important;
+				backface-visibility: visible!important;
+				-webkit-animation-name: front_come_back;
+				animation-name: front_come_back
+			}
+			
+			/*------------------------------------*/
+			/*背面旋转回来*/
+			@-webkit-keyframes back_to_over {
+				0% {
+					-webkit-transform: perspective(3000px) rotateY(-180deg);
+					transform: perspective(3000px) rotateY(-180deg);	
+					z-index: 1; 
+				}
+				50%{
+					z-index: 1;
+				}
+				51%{
+					z-index: 2;
+				}
+				100% {
+					-webkit-transform: perspective(3000px) rotateY(0deg);
+					transform: perspective(3000px) rotateY(0deg);
+					z-index: 2;
+				}
+			}
+			.back_to_over {
+				-webkit-backface-visibility: visible!important;
+				-ms-backface-visibility: visible!important;
+				backface-visibility: visible!important;
+				-webkit-animation-name: back_to_over;
+				animation-name: back_to_over
+			}
+/*背面旋转到180*/
+			@-webkit-keyframes back_to_under {
+				0% {
+					-webkit-transform: perspective(3000px) rotateY(0deg);
+					transform: perspective(3000px) rotateY(0deg);	
+					z-index: 2; 
+				}
+				50%{
+					z-index: 2;
+				}
+				51%{
+					z-index: 1;
+				}
+				100% {
+					-webkit-transform: perspective(3000px) rotateY(-180deg);
+					transform: perspective(3000px) rotateY(-180deg);
+					z-index: 1;
+				}
+			}
+			.back_to_under {
+				-webkit-backface-visibility: visible!important;
+				-ms-backface-visibility: visible!important;
+				backface-visibility: visible!important;
+				-webkit-animation-name: back_to_under;
+				animation-name: back_to_under
+			}
+
+		</style>
+	</head>
+	<body>
+		
+		<div id="warp">
+				<div class="div1">
+					<img  width="100%"  src="img/cloth_back.png" />
+				</div>
+				<div class="div2">
+					<img width="100%" src="img/4162392_093905472178_2.jpg" />
+				</div>	
+		</div>
+		<input value="front" id="btn1" type="button" />
+		<input value="back" id="btn2" type="button" />
+	</body>
+</html>
+<script>
+ 
+	var div1=document.getElementsByClassName("div1")[0];
+	var div2=document.getElementsByClassName("div2")[0];
+	function chock_front_or_back(){
+	    if(getStyle(div1,"z-index")==2){
+	 		return "front";
+	 	}else{
+	 		return "back";
+	 	}
+	}
+	btn1.addEventListener('click',function(){
+ 		 back_to_front("front_come_back","back_to_under")
+ 	},false);
+ 	btn2.addEventListener('click',function(){
+ 		front_to_back("front_to_back","back_to_over")
+ 	},false);
+ 	function back_to_front(front_come_back,back_to_under){
+    	if(chock_front_or_back()=="front"){
+    		return;
+    	}else{
+    		console.log("前面旋转到后面");
+	    	addClass(div1,'animated '+front_come_back);
+			addClass(div2,'animated '+back_to_under);
+	        setTimeout(function(){
+	        	removeClass(div1,'animated '+front_come_back);
+	        	removeClass(div2,'animated '+back_to_under);
+	         	addClass(div1,'div1');
+	         	addClass(div2,'div2');
+	         	removeClass(div1,'div1_stop');
+	         	removeClass(div2,'div2_stop');
+	        },1000) 
+    	}
+    	
+	}
+
+  function front_to_back(front_to_back,back_to_over){
+  	if(chock_front_or_back()=="back"){
+    		return;
+    	}else{
+    		console.log("前面旋转到后面");
+	    	addClass(div1,'animated '+front_to_back);
+			addClass(div2,'animated '+back_to_over);
+	        setTimeout(function(){
+	        	removeClass(div1,'animated '+front_to_back);
+	         	removeClass(div2,'animated '+back_to_over);
+	         	removeClass(div1,'div1');
+	         	removeClass(div2,'div2');
+	         	addClass(div1,'div1_stop');
+	         	addClass(div2,'div2_stop');
+	        },1000)   
+    	}
+  }
+    //样式控制函数
+    function hasClass(obj, cls) {  
+	    return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));  
+	}  
+	  
+	function addClass(obj, cls) {  
+	    if (!hasClass(obj, cls)) obj.className += " " + cls;  
+	}  
+	  
+	function removeClass(obj, cls) {  
+	    if (hasClass(obj, cls)) {  
+	        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');  
+	        obj.className = obj.className.replace(reg, ' ');  
+	    }  
+	}  
+	function getStyle(obj,name){
+		if(obj.currentStyle){
+		 	return obj.currentStyle[name];
+		} else {
+			return getComputedStyle(obj,false)[name];
+	 	}	 
+	}
+</script>

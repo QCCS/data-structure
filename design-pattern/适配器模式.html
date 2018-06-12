@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        .div1{
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    //适配器模式
+    //usb接口（方形的）与ps2接口（圆形的）；他们之间需要一个设备作为中转
+    var obj={//以前的数据是一个对象
+        str1:'111',
+        str2:'222',
+        str3:'333'
+    }
+
+    //中间利用一个适配器
+    function adapter(obj){
+        interface_fn(obj.str1,obj.str2,obj.str3)
+    }
+
+    function interface_fn(x,y,z){//现在的数据改为一个函数
+
+    }
+    //===========================================
+    //案例，适配jquery写法与yui写法
+    //jquery选择id，不能传数组，一个id就传一个id,多个id就传多个参数
+    function $(){
+        var elements=[];
+        for(var i=0;i<arguments.length;i++){
+            var element=arguments[i];
+            if(typeof element=='string'){
+                element=document.getElementById(element);
+            }
+            if(arguments.length==1){
+                return element;
+            }
+            elements.push(element);
+        }
+        return elements;
+    }
+
+    //yui选择id,只传递一个参数，类型不是字符串，就是数组
+    var YAHOO={};
+    YAHOO.get=function(el){
+        if(typeof el =="string"){
+            return document.getElementById(el);
+        }
+        if(el instanceof Array){
+            var elements=[];
+            for(var i=0;i<el.length;i++){
+                elements[el.length]=YAHOO.get(el[i]);
+            }
+            return elements;
+        }
+        if(el){
+            return el;
+        }
+        return null;
+
+    }
+
+
+    //写一个适配器，让两种开发人员都保持原来的写法
+    YAHOO.get=yui_to_adapter;
+    function yui_to_adapter(){
+        if(arguments.length==1){//对于yui开发人员，传递一个参数
+            return $.apply(window,e instanceof Array?e:[e]);
+        }else{
+            return $.apply(window,arguments)
+        }
+    }
+
+
+    //对象方法的迁移控制
+    var obj_a=function(){
+        this.a1=function(str){
+            console.log(str);
+        }
+        this.a2=function(str){
+            console.log(str);
+        }
+        this.a3=function(str){
+            console.log(str);
+        }
+    }
+
+    obj_a.prototype.aa1=function(){
+        console.log("a de yuanxing method")
+    }
+    var obj_b=function(){
+
+        this.b1=function(str,str1){
+            console.log(str);
+        }
+
+        this.b2=function(str,str1){
+            console.log(str+str1);
+        }
+        this.b3=function(str,str1){
+            console.log(str);
+        }
+    }
+    obj_b.prototype=new obj_a();
+    var obj_control=function(){
+
+    }
+
+    var bb=new obj_b();
+    bb.aa1();
+    //	function a1(){
+    //	 	console.log(1);
+    //	}
+    //	function b1(){
+    //		a1.apply(b1,arguments)
+    //		console.log(2);
+    //	}
+    //	b1();
+
+
+
+
+    for(var i=0;i<10;i++){
+        for(var j=0;j<10;j++){
+            var new_div=document.createElement("div");
+            new_div.style.top=i*40+"px";
+            new_div.style.left=j*40+"px";
+            new_div.className="div1";
+            document.body.appendChild(new_div);
+        }
+    }
+</script>
