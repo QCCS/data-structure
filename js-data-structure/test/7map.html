@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Map</title>
+</head>
+<body>
+
+<script src="../js/7map.js"></script>
+<script>
+    window.onload = function () {
+        var m = new Map();
+        m.put('01', 'abc');
+        m.put('02', '120');
+        m.put('03', true);
+        m.put('04', new Date());
+        //alert(m.size())
+        //alert(m.get('03'))
+        m.eachMap(function (key, value) {
+            //alert(key+':'+value)
+        });
+    }
+</script>
+</body>
+</html>

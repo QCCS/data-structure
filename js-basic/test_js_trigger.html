@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
-        #test_div{
+        #test_div {
             width: 100px;
             height: 100px;
             border: solid;
@@ -24,7 +24,7 @@
 <script>
 
     var btn1 = document.getElementById("btn1");
-    var test_div=document.getElementById("test_div");
+    var test_div = document.getElementById("test_div");
 
 
     //普通事件绑定测试
@@ -40,8 +40,6 @@
     e1.initEvent("click", true, true);
     e1.eventType = 'message';
     btn1.dispatchEvent(e1);
-
-
 
 
     //自定义事件测试
@@ -60,15 +58,15 @@
 
 
     //下面有触发自定义事件
-    var i=100;
-    setInterval(function(){
+    var i = 100;
+    setInterval(function () {
         i++
-        test_div.style.width=i+"px";
-        if(i===200){
+        test_div.style.width = i + "px";
+        if (i === 200) {
             console.log(1)
             test_div.dispatchEvent(e2);
         }
-    },20)
+    }, 20)
 
     //注意:
     //自定义事件是无法自动触发的,因为浏览器是没有这个事件

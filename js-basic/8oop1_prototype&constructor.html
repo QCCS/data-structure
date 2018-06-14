@@ -1,151 +1,211 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title></title>
-	</head>
-	<body>
-	</body>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+</body>
 </html>
 <script>
-	window.onload=function(){
-		
-		//安静100分钟来理清js对象，以及类的生成
-		//深入理解对象原型与constructor
-		//1-----------------------------------------
-		//定义一个对象
-		function obj(){
-			
-		}
-		//对象需要一些共用方法，下面通过原型继承
-		obj.prototype.name="name";
-		obj.prototype.say=function(){
-			console.log("h1");
-		};
-		var obj1 = new obj();//实例对象
-		console.log(obj1.name);
-		obj1.say();
-		//上面的方法跑起来一切正常，但是还有另一种方法；
-		
-		//2---------------------------------------------------
-		function obj2(){
-			
-		}
-		//专门定义一个放原型对象里面的属性与方法的对象
-		//然后在空对象里面添加需要的属性与方法，再赋给真正的原型
-		var prototype_test={};
-		prototype_test={
-			name:"name2",
-			say:function(){
-				console.log("h2");
-			}
-		}
-		obj2.prototype=prototype_test;
-		var obj2=new obj2();//实例对象
-		console.log(obj2.name);
-		console.log(obj2.constructor);
-		obj2.say;
-		
-	//这样定义的原型对象，好像比较方便，也容易控制，但是这个原型对象的constructor很明显会指向另一个空对象，而不是本身的obj2
-	//原本原型对象的构造器会指向原型本身的。
-	
-	
-	//3++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	
-	
-	//于是就有意给原型对象，添加一个叫constructor的属性，避免访问构造器的时候，指向那个空对象。
-		function obj3(){
-				
-			}
-		var prototype_test={};
-			prototype_test={
-				    constructor:obj3,//增加一个属性，指向本身
-					name:"name2",
-					say:function(){
-						console.log("h2");
-					}
-			};
-		obj3.prototype=prototype_test;
-		var obj3=new obj3();//实例对象
-	    console.log(obj3.constructor);
-	    
-	    //这样定义的原型，里面所有的属性与方法都可以被枚举for in
-	    //原本的构造器虽然是对象的属性，但是并不会被枚举，
-		 
-	//4---------------------------------------------
-	//在高版本浏览器中支持一个重新定义对象的构造器的函数，可以用这个函数给一个对象定义一个指定的构造器
-	//可以配置是否被被枚举，就像原生的一样。
-	Object.defineProperty(obj,"constructor",{//需要被指定构造器的对象
-		enumerable:false,//是否被枚举
-		value:obj//指定的构造器
-	})
-	
-	//5===========================================================
-	
-	//原型链的动态特征
-	function obj4(){
-		
-	}
-	var obj4=new obj4();
-	 obj4.prototype={
-		name:"name4"
-	}
-	//console.log(obj4.name);//这里打印会报错，因为在原型没有给定属性name的时候，以及实例对象obj4，所以obj4并不会有name这个属性
-	
-	//6-----------------------------------------
-	
-	//规范定义类
-	function obj5(name,age,sex){
-		this.name=name;
-		this.age=age;
-		this.sex=sex;
-	}
-	obj5.prototype={
-		constructor:obj5,//指向本身的原型构造器
-		say_name:function(){
-			console.log(this.name);
-		}
-	}
- 
-	 var obj5=new obj5("obj5",33,"none");
-	 obj5.say_name();
- //7-------------------------------------------------
- //便捷方式，动态模式
- //把原型写在函数内部
- 	function obj6(name,age,sex){
-		this.name=name;
-		this.age=age;
-		this.sex=sex;
-		 
-		if(typeof this.say_name!='function'){
-		 	obj6.prototype.say_name=function(){
-		 		console.log(this.name);
-		 	}
-		 }
-	}
-  var obj6=new obj6("obj6",33,"none");
-	 obj6.say_name();
-	 
-	 
-	 
- //8---------------------------------------------
- 
- //安全模式，对象的闭包
- 
- function obj7(name){
- 	var obj=new Object();
- 	var name=name;
- 	obj.say_name=function(){
- 		console.log(name);
- 	}
- 	return obj;
- }
- var obj7=new obj7("name7");
- obj7.say_name();
- 
- 
- 
- 
- 
-	}
+    window.onload = function () {
+
+        //安静100分钟来理清js对象，以及类的生成
+        //深入理解对象原型与constructor
+
+
+
+
+
+
+        //1--------------------------------------------------
+        //定义一个对象
+        function obj() {
+        }
+        //对象需要一些共用方法，下面通过原型继承
+        obj.prototype.name = "name";
+        obj.prototype.say = function () {
+            console.log("h1");
+        };
+        var obj1 = new obj();//实例对象
+        console.log(obj1.name);
+        obj1.say();
+        //上面的方法跑起来一切正常，但是还有另一种方法；
+
+
+
+
+
+
+        //2---------------------------------------------------
+        function obj2() {
+        }
+        //专门定义一个放原型对象里面的属性与方法的对象
+        //然后在空对象里面添加需要的属性与方法，再赋给真正的原型
+        var prototype_test = {};
+        prototype_test = {
+            name: "name2",
+            say: function () {
+                console.log("h2");
+            }
+        }
+        obj2.prototype = prototype_test;
+        var obj2 = new obj2();//实例对象
+        console.log(obj2.name);
+        console.log(obj2.constructor);
+        obj2.say;
+
+        //这样定义的原型对象，好像比较方便，也容易控制，但是这个原型对象的constructor很明显会指向另一个空对象，而不是本身的obj2
+        //原本原型对象的构造器会指向原型本身的。
+
+
+
+
+
+
+
+
+
+
+        //3---------------------------------------------------
+        //于是就有意给原型对象，添加一个叫constructor的属性，避免访问构造器的时候，指向那个空对象。
+        function obj3() {
+
+        }
+
+        var prototype_test = {};
+        prototype_test = {
+            constructor: obj3,//增加一个属性，指向本身
+            name: "name2",
+            say: function () {
+                console.log("h2");
+            }
+        };
+        obj3.prototype = prototype_test;
+        var obj3 = new obj3();//实例对象
+        console.log(obj3.constructor);
+
+        //这样定义的原型，里面所有的属性与方法都可以被枚举for in
+        //原本的构造器虽然是对象的属性，但是并不会被枚举，
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //4---------------------------------------------
+        //在高版本浏览器中支持一个重新定义对象的构造器的函数，可以用这个函数给一个对象定义一个指定的构造器
+        //可以配置是否被被枚举，就像原生的一样。
+        Object.defineProperty(obj, "constructor", {//需要被指定构造器的对象
+            enumerable: false,//是否被枚举
+            value: obj//指定的构造器
+        })
+
+
+
+
+
+
+
+
+
+
+
+        //5---------------------------------------------
+        //原型链的动态特征
+        function obj4() {
+        }
+        var obj4 = new obj4();
+        obj4.prototype = {
+            name: "name4"
+        }
+        //console.log(obj4.name);//这里打印会报错，因为在原型没有给定属性name的时候，以及实例对象obj4，所以obj4并不会有name这个属性
+
+
+
+
+
+
+
+
+
+        //6-----------------------------------------
+
+        //规范定义类
+        function obj5(name, age, sex) {
+            this.name = name;
+            this.age = age;
+            this.sex = sex;
+        }
+
+        obj5.prototype = {
+            constructor: obj5,//指向本身的原型构造器
+            say_name: function () {
+                console.log(this.name);
+            }
+        }
+
+        var obj5 = new obj5("obj5", 33, "none");
+        obj5.say_name();
+
+
+
+
+
+
+
+
+
+        //7-------------------------------------------------
+        //便捷方式，动态模式
+        //把原型写在函数内部
+        function obj6(name, age, sex) {
+            this.name = name;
+            this.age = age;
+            this.sex = sex;
+
+            if (typeof this.say_name != 'function') {
+                obj6.prototype.say_name = function () {
+                    console.log(this.name);
+                }
+            }
+        }
+
+        var obj6 = new obj6("obj6", 33, "none");
+        obj6.say_name();
+
+
+
+
+
+
+
+
+
+        //8---------------------------------------------
+
+        //安全模式，对象的闭包
+
+        function obj7(name) {
+            var obj = new Object();
+            var name = name;
+            obj.say_name = function () {
+                console.log(name);
+            }
+            return obj;
+        }
+
+        var obj7 = new obj7("name7");
+        obj7.say_name();
+
+
+    }
 </script>

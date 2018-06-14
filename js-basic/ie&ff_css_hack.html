@@ -37,7 +37,7 @@
     </li>
     <li>
         在mozilla firefox和IE中的BOX模型解释不一致导致相差2px解决方法：div
-        {margin:30px!important;margin:28px;}  注意这两个margin的顺序一定不能写反，据
+        {margin:30px!important;margin:28px;} 注意这两个margin的顺序一定不能写反，据
         阿捷的说法!important这个属性IE不能识别，但别的浏览器可以识别。所以在IE下其实
         解释成这样：div{maring:30px;margin:28px}
         重复定义的话按照最后一个来执行，所以不可以只写margin:XXpx!important;
@@ -75,7 +75,7 @@
         现问题。在IE中，外层的宽度会被内层更宽的div挤破。一定要用Photoshop或者
         Firework量取像素级的精度。
 
-</li>
+    </li>
     <li>
         如果是动态地添加内容，高度最好不要定义。浏览器可以自动伸缩，然而如果是静
         态的内容，高度最好定好。(似乎有时候不会自动往下撑开，不知道具体怎么回事)

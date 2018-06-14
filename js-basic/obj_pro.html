@@ -10,55 +10,54 @@
 </html>
 <script>
 
-    var age=11;
-    var sex="sex";
+    var age = 11;
+    var sex = "sex";
 
-    var test_obj={
-        width:"22px",
-        "name":"json",
-        "age":age,//字符串变量内容
-        sex:"male",//字符串变量作为属性名
-        11:"11111",//纯数字作为属性名
-        if:"else"//用保留字作为属性名
+    var test_obj = {
+        width: "22px",
+        "name": "json",
+        "age": age,//字符串变量内容
+        sex: "male",//字符串变量作为属性名
+        11: "11111",//纯数字作为属性名
+        if: "else"//用保留字作为属性名
     }
     //用中括号访问
-    for(var key in test_obj){
-        console.log(key+":"+test_obj[key]);
+    for (var key in test_obj) {
+        console.log(key + ":" + test_obj[key]);
     }
 
     console.log("-------------低调的分割线-----------");
     //用点访问
-    for(var key in test_obj){
-        console.log(key+":"+test_obj.key);
+    for (var key in test_obj) {
+        console.log(key + ":" + test_obj.key);
     }
     console.log("-------------低调的分割线-----------");
     console.log(test_obj.width);
     console.log(test_obj.name);
     console.log(test_obj.age);
     console.log(test_obj.sex);
-//    console.log(test_obj.11);
+    //    console.log(test_obj.11);
     console.log(test_obj.if);
 
 
     //测试结果,用点访问时,数字不能作为属性名
 
 
-    var obj={}
-    var obj2=obj;
+    var obj = {}
+    var obj2 = obj;
 
-    obj.name="json";
-    obj2.name="json2";
+    obj.name = "json";
+    obj2.name = "json2";
 
     console.log(obj.name);
     console.log(obj2.name);
 
 
-
-    var arr=[1,2];
-    arr[100]="100";
+    var arr = [1, 2];
+    arr[100] = "100";
     console.log(arr.length);
 
-    arr.length=3;
+    arr.length = 3;
 
     console.log(arr[10000]);
 

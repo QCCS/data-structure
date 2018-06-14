@@ -24,16 +24,26 @@
         使用 window.event 无法在火狐浏览器上运行
         (2)解决方法：
         火狐 的 event 只能在事件发生的现场使用，此问题暂无法解决。可以这样变通：
-        原 代码(可在IE中运行)： <br /><input type="button" name="someButton" value="
-提交" onclick="javascript:gotoSubmit()"/><br />...<br /><script
-            language="javascript"><br />function gotoSubmit() {<br />...<br />alert
-    (window.event); // use window.event<br />...<br />}<br /></script>
+        原 代码(可在IE中运行)： <br/><input type="button" name="someButton" value="
+提交" onclick="javascript:gotoSubmit()"/><br/>...<br/>
+        <script
+                language="javascript"><br />function gotoSubmit() {<br / >
+        ...<
+        br / > alert
+        (window.event); // use window.event<br />...<br />}<br /></script>
 
         新 代码(可在IE和火狐中运行)： <input type="button" name="someButton" value="
-提交" onclick="javascript:gotoSubmit(event)"/><br />...<br /><script
-            language="javascript"><br />function gotoSubmit(evt) {<br />evt = evt ? evt :
-            (window.event ? window.event : null);<br />...<br />alert(evt); // use evt<br
-    />...<br />}<br /></script>
+提交" onclick="javascript:gotoSubmit(event)"/><br/>...<br/>
+        <script
+                language="javascript"><br />function gotoSubmit(evt) {<br / > evt = evt ? evt :
+            (window.event ? window.event : null);
+        <
+        br / >
+        ...<
+        br / > alert(evt); // use evt<br
+        />...<br / >
+        }<
+        br / ></script>
         此外，如果新代码中第一行不改，与老代码一样的话(即 gotoSubmit 调用没有给参数)
         ，则仍然只能在IE中运行，但不会出错。所以，这种方案 tpl 部分仍与老代码兼容。
     </li>
@@ -80,7 +90,7 @@
         (2)解决方法
         在frame的使用方面火狐和ie的最主要的区别是：
         如果在frame标签中书写了以下属性：
-        <frame src="xx.htm" id="frameId" name="frameName" />
+        <frame src="xx.htm" id="frameId" name="frameName"/>
         那么ie可以通过id或者name访问这个frame对应的window对象
         而火狐只可以通过name来访问这个frame对应的window对象
         例如如果上述frame标签写在最上层的window里面的htm里面，那么可以这样访问
@@ -146,14 +156,14 @@
 
     </li>
 
-<li>
-    window.location.href问题
+    <li>
+        window.location.href问题
 
-    说明:IE或者Firefox2.0.x下,可以使用window.location或
-    window.location.href;Firefox1.5.x下,只能使用window.location.
-    解决方法:使用window.location来代替window.location.href.
+        说明:IE或者Firefox2.0.x下,可以使用window.location或
+        window.location.href;Firefox1.5.x下,只能使用window.location.
+        解决方法:使用window.location来代替window.location.href.
 
-</li>
+    </li>
     <li>
         模态和非模态窗口问题
 
@@ -201,7 +211,6 @@
         left:1px;
 
     </li>
-
 
 
 </ol>

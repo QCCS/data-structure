@@ -1,151 +1,152 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title></title>
-		<style>
-			#test{
-				width:100px;
-				height: 100px;
-				background: red;
-			}
-		</style>
-	</head>
-	<body>
-		<div id="test"></div>
-		
-		 
-	</body>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        #test {
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<div id="test"></div>
+
+
+</body>
 </html>
 <script>
-//事件队列，就是把事件放在一个队列（数组）里面依次一个一个执行
-//有时候是非常有用的，普通的mouse事件，都是及时的，我们鼠标放在上面马上就执行了，鼠标离开也马上执行了
-//但是有时候，执行一个事件需要几秒钟，由于用户的动作比较快，几秒钟下来，对同一个对象既有mouse移入，移出，点击事件等
-//都加入事件队列，如果没有事件队列的概念，原生的事件机制比较乱。但是有时候需要制止这种行为，当用户停止交互了，就不要再执行事件队列
-//后面的事件了
-//___________________________________________---
-//及时执行的事件可以不考虑用事件队列进行处理
-//var test=document.getElementById("test");
-//test.onmouseover=function(){
-//	this.style.background="blue";
-//}
-//test.onmouseout=function(){
-//	this.style.background="red";
-//}
+    //事件队列，就是把事件放在一个队列（数组）里面依次一个一个执行
+    //有时候是非常有用的，普通的mouse事件，都是及时的，我们鼠标放在上面马上就执行了，鼠标离开也马上执行了
+    //但是有时候，执行一个事件需要几秒钟，由于用户的动作比较快，几秒钟下来，对同一个对象既有mouse移入，移出，点击事件等
+    //都加入事件队列，如果没有事件队列的概念，原生的事件机制比较乱。但是有时候需要制止这种行为，当用户停止交互了，就不要再执行事件队列
+    //后面的事件了
+    //___________________________________________---
+    //及时执行的事件可以不考虑用事件队列进行处理
+    //var test=document.getElementById("test");
+    //test.onmouseover=function(){
+    //	this.style.background="blue";
+    //}
+    //test.onmouseout=function(){
+    //	this.style.background="red";
+    //}
 
-//------------------------------------
-//当用户在div上快速移入移出事件，操作十几次，即使当用户停止了交互，也会把事件队列里面的事件处理完
-var test=document.getElementById("test");
-	test.onmouseover=function(){
-		setTimeout(function(){
-			test.style.background="blue";
-			console.log(1);
-		},1000)
-	}
-	test.onmouseout=function(){
-		setTimeout(function(){
-			test.style.background="red";
-			console.log(2);
-		},2000)
-	}
-	
-//======================================================
-//来一个处理事件队列队列
-var KEQueue = function(data) {
-    this.staticQueue = [];
-    this.asyncQueue = [];
-    this.status = "running";
-    this.result = data;
-    return this;
-}
-KEQueue.prototype = {
-    next:function(callback, async) {//添加一个方法
-        if(!!async) {
-            this.staticQueue.push("async");//如果是异步方法（会有延时效果的方法）就添加标识
-            this.asyncQueue.push(callback);//延时方法的存放数组
-        }else {
-            this.staticQueue.push(callback);//直接触发的方法的存放数组
-        }
-        return this;
-    },
-    wait:function(delay) {//延迟执行序列
-        var self = this;
-        this.next(function() {//模拟添加一个延时方法
-            setTimeout(function() {
-                self.wake.call(self)
-            }, delay);
-        },true);
-        return this;
-    },
-    go:function() {//按事件添加的先后顺序依次执行事件
-        if(this.staticQueue.length == 0) return;
- 
-        while(this.staticQueue.length > 0) {
-            if(this.status === "sleep") return;
-             
-            var fun = this.staticQueue.shift();
-            if(typeof fun == "string" && fun == "async") {
-                fun = this.asyncQueue.shift();
-                fun(this.result);
-                this.sleep();
-            }else {
-                fun(this.result);
-            }
-        }
-    },
-    sleep:function() {
-        this.status = "sleep";
-    },
-    wake:function() {
-        this.status = "running";
-        this.go();
-    }
-}
+    //------------------------------------
+    //当用户在div上快速移入移出事件，操作十几次，即使当用户停止了交互，也会把事件队列里面的事件处理完
+    var test = document.getElementById("test");
+    test.onmouseover = function () {
+        setTimeout(function () {
+            test.style.background = "blue";
+            console.log(1);
+        }, 1000)
+    }
+    test.onmouseout = function () {
+        setTimeout(function () {
+            test.style.background = "red";
+            console.log(2);
+        }, 2000)
+    }
 
-//示例1 添加事件、执行事件队列
-function show(n) {    
-	console.log(n);
-}
-var o = new KEQueue("0");
-o.next(function(d) {    //参数是构造时传递的数据。整个事件队列都会返回该数据作为参数。
-	show(d + 1);
-}).next(function(d) {    
-	setTimeout(function() { //模拟延时操作（异步操作）
-		show(d + 2);        
-		o.result = 0;   //更改用以传递的数据，如果不修改，该数据会保持一致一直传递到最后一个事件。
-		        
-		o.wake(); //需要手动唤醒序列
-		    
-	}, 2000);
-}, true).next(function(d) {    
-	show(d + 3);
-}).go(); 
-//o.next(function(d) {    
-//		setTimeout(function() {
-//			show(d + 4);
-//			o.wake();
-//		}, 1000);
-//	}, true).wait(1000)   //手动推迟1秒执行下面的方法
-//	.next(function(d) {    
-//		show(d + 5);
-//	}).go(); 
-//示例2
-//o.next(function() {    
-//	show(1);
-//})
-//setTimeout(function() {    
-//	o.next(function() {        
-//		setTimeout(function() {        
-//			show(2);        
-//			o.wake();        
-//		}, 2000)    
-//	}, true).go();
-//}, 1000);
-//setTimeout(function() {    
-//	o.next(function() {        
-//		show(3);    
-//	}).go();
-//}, 2000);
+    //======================================================
+    //来一个处理事件队列队列
+    var KEQueue = function (data) {
+        this.staticQueue = [];
+        this.asyncQueue = [];
+        this.status = "running";
+        this.result = data;
+        return this;
+    }
+    KEQueue.prototype = {
+        next: function (callback, async) {//添加一个方法
+            if (!!async) {
+                this.staticQueue.push("async");//如果是异步方法（会有延时效果的方法）就添加标识
+                this.asyncQueue.push(callback);//延时方法的存放数组
+            } else {
+                this.staticQueue.push(callback);//直接触发的方法的存放数组
+            }
+            return this;
+        },
+        wait: function (delay) {//延迟执行序列
+            var self = this;
+            this.next(function () {//模拟添加一个延时方法
+                setTimeout(function () {
+                    self.wake.call(self)
+                }, delay);
+            }, true);
+            return this;
+        },
+        go: function () {//按事件添加的先后顺序依次执行事件
+            if (this.staticQueue.length == 0) return;
+
+            while (this.staticQueue.length > 0) {
+                if (this.status === "sleep") return;
+
+                var fun = this.staticQueue.shift();
+                if (typeof fun == "string" && fun == "async") {
+                    fun = this.asyncQueue.shift();
+                    fun(this.result);
+                    this.sleep();
+                } else {
+                    fun(this.result);
+                }
+            }
+        },
+        sleep: function () {
+            this.status = "sleep";
+        },
+        wake: function () {
+            this.status = "running";
+            this.go();
+        }
+    }
+
+    //示例1 添加事件、执行事件队列
+    function show(n) {
+        console.log(n);
+    }
+
+    var o = new KEQueue("0");
+    o.next(function (d) {    //参数是构造时传递的数据。整个事件队列都会返回该数据作为参数。
+        show(d + 1);
+    }).next(function (d) {
+        setTimeout(function () { //模拟延时操作（异步操作）
+            show(d + 2);
+            o.result = 0;   //更改用以传递的数据，如果不修改，该数据会保持一致一直传递到最后一个事件。
+
+            o.wake(); //需要手动唤醒序列
+
+        }, 2000);
+    }, true).next(function (d) {
+        show(d + 3);
+    }).go();
+    //o.next(function(d) {    
+    //		setTimeout(function() {
+    //			show(d + 4);
+    //			o.wake();
+    //		}, 1000);
+    //	}, true).wait(1000)   //手动推迟1秒执行下面的方法
+    //	.next(function(d) {    
+    //		show(d + 5);
+    //	}).go(); 
+    //示例2
+    //o.next(function() {    
+    //	show(1);
+    //})
+    //setTimeout(function() {    
+    //	o.next(function() {        
+    //		setTimeout(function() {        
+    //			show(2);        
+    //			o.wake();        
+    //		}, 2000)    
+    //	}, true).go();
+    //}, 1000);
+    //setTimeout(function() {    
+    //	o.next(function() {        
+    //		show(3);    
+    //	}).go();
+    //}, 2000);
 
 
 </script>
