@@ -10,19 +10,49 @@
 </html>
 
 <script>
-    var add = function aa(a, b) {
+
+    function bar() {
+        var foo;
+        foo = 10;
+        //函数变量提升
+        function foo() {}
+        return foo;
+    }
+    console.log(typeof bar());//number
+
+    function bar2() {
+        var foo;
+        foo = 10;
+        return foo;
+        //这里主要，当有return的时候，一旦前面找到定义完成的变量，后面就不在执行
+        function foo() {}
+        foo = 11;
+    }
+    console.log(typeof bar2());
+
+    function bar3() {
+        var foo;
+        return foo;
+        //这里主要，当有return的时候，一旦前面找到定义完成的变量，后面就不在执行
+        //由于函数先提升，所以当执行到return的时候，已经有了变量
+        function foo() {}
+        foo = 11;
+    }
+    console.log(typeof bar3());
+
+    var addone = function aa(a, b) {
         console.log(a + b)
     }
 
-    function add(a, b) {
+    function addone(a, b) {
         console.log(a - b)
     }
 
     // 变量提示，function，var等都是变量提升到前面，之后才赋值，
     // function级别高，先提升赋值
-    // let 不存在变量提升
+    // let定义的变量 不存在变量提升
 
-    add(4, 1);
+    addone(4, 1);
 
     //    function add(a, b) {
     //        console.log(a - b)

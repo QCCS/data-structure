@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+
+<script>
+    //序列化方式
+    function cloneObj(obj) {
+        var str, newobj = obj.constructor === Array ? [] : {};
+        if (typeof obj !== 'object') {
+            return;
+        } else if (window.JSON) {
+            str = JSON.stringify(obj), //序列化对象
+                newobj = JSON.parse(str); //还原
+        } else {
+            for (var i in obj) {
+                newobj[i] = typeof obj[i] === 'object' ?
+                    cloneObj(obj[i]) : obj[i];
+            }
+        }
+        return newobj;
+    };
+
+    //递归方式
+    function deepCopy(p, c) {
+        var i;
+        c = c || {};
+        for (i in p) {
+            if (p.hasOwnProperty(i)) {
+                if (typeof(p[i]) === "object") {
+                    c[i] = Array.isArray(p[i]) ? [] : {};
+                    deepCopy(p[i], c[i]);
+                } else {
+                    c[i] = p[i];
+                }
+            }
+        }
+        return c;
+    }
+
+
+    function equalArrays(a, b) {
+        if (a.length != b.length) return false;  //两个长度不同的数组不相等
+        for (var i = 0; i < a.length; i++) {
+            if (a[i] != b[i]) return false;
+        }
+        return true;
+    }
+
+
+</script>
+</html>
