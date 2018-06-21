@@ -19,8 +19,8 @@
                 newobj = JSON.parse(str); //还原
         } else {
             for (var i in obj) {
-                newobj[i] = typeof obj[i] === 'object' ?
-                    cloneObj(obj[i]) : obj[i];
+                //查看属性是否是对象，如果是，继续递归
+                newobj[i] = typeof obj[i] === 'object' ? cloneObj(obj[i]) : obj[i];
             }
         }
         return newobj;
