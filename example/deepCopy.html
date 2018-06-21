@@ -19,6 +19,7 @@
         } else {
             //浏览器不支持json
             for (var i in obj) {
+                //查看属性是否是对象，如果是，继续递归
                 newobj[i] = typeof obj[i] === 'object' ? cloneObj(obj[i]) : obj[i];
             }
         }

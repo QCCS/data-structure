@@ -28,9 +28,34 @@
 	    return data;  
 	}  
 
-console.log(uniqueArray(arr3))
+	console.log(uniqueArray(arr3))
 
 
 	//es6的数组去重
-//    var tt  = [...new Set([5,5,6,6,8,])] // 5，6，8
+	//var tt  = [...new Set([5,5,6,6,8,])] // 5，6，8
+
+
+
+    //数组去重
+    //对象的key值不会重复，后者覆盖前者
+
+    var arr11=[2,6,90,7,3,900];
+    var arr22=[55,2,5,3,900];
+    var arr=arr11.concat(arr22);
+
+    function tosingle_arr(arr){
+        var obj={};
+        var arr_=[];
+        for(var i=0;i<arr.length;i++){
+            obj[arr[i]]=true;
+        }
+        for(var attr in obj){
+            if(obj.hasOwnProperty(attr)){
+                arr_.push(attr);
+            }
+        }
+        return arr_;
+    }
+
+    console.log(tosingle_arr(arr));
 </script>
