@@ -11,16 +11,15 @@
 <script>
     //序列化方式
     function cloneObj(obj) {
-        var str, newobj = obj.constructor === Array ? [] : {};
+        var newobj = obj.constructor === Array ? [] : {};
         if (typeof obj !== 'object') {
             return;
         } else if (window.JSON) {
-            str = JSON.stringify(obj), //序列化对象
-                newobj = JSON.parse(str); //还原
+                newobj = JSON.parse(JSON.stringify(obj)); //还原
         } else {
+            //浏览器不支持json
             for (var i in obj) {
-                newobj[i] = typeof obj[i] === 'object' ?
-                    cloneObj(obj[i]) : obj[i];
+                newobj[i] = typeof obj[i] === 'object' ? cloneObj(obj[i]) : obj[i];
             }
         }
         return newobj;
