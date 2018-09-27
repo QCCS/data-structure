@@ -135,9 +135,28 @@ function CArray(numElements) {
                 right.push(arr[i]);
             }
         }
+        //最后是连接左边中间右边（递归连接）
         return qSort(left).concat(pivot, qSort(right));
     }
 
+
+    function testq(arr) {
+        if(arr.length<=1){
+            return arr;
+        }
+        var middle = arr[0];
+        var left = [];
+        var right = [];
+        for(var i=1;i<arr.length;i++){
+            if(arr[i] <middle ){
+                left.push(arr[i]);
+            }else {
+                right.push(arr[i]);
+            }
+        }
+
+        return testq(left).concat(middle,testq(right));
+    }
     //归并排序
     this.mergeSort = function mergeSort(arr) {
         var arr = arr || this.dataStore;
@@ -150,33 +169,35 @@ function CArray(numElements) {
             left = 0;
             right = step;
             while (right + step <= arr.length) {
-                mergeArrays(arr, left, left+step, right, right+step);
+                mergeArrays(arr, left, left + step, right, right + step);
                 left = right + step;
                 right = left + step;
             }
             if (right < arr.length) {
-                mergeArrays(arr, left, left+step, right, arr.length);
+                mergeArrays(arr, left, left + step, right, arr.length);
             }
             step *= 2;
         }
     }
 
+
+
     function mergeArrays(arr, startLeft, stopLeft, startRight, stopRight) {
         var rightArr = new Array(stopRight - startRight + 1);
         var leftArr = new Array(stopLeft - startLeft + 1);
         k = startRight;
-        for (var i = 0; i < (rightArr.length-1); ++i) {
+        for (var i = 0; i < (rightArr.length - 1); ++i) {
             rightArr[i] = arr[k];
             ++k;
         }
 
         k = startLeft;
-        for (var i = 0; i < (leftArr.length-1); ++i) {
+        for (var i = 0; i < (leftArr.length - 1); ++i) {
             leftArr[i] = arr[k];
             ++k;
         }
-        rightArr[rightArr.length-1] = Infinity; // a sentinel value
-        leftArr[leftArr.length-1] = Infinity; // a sentinel value
+        rightArr[rightArr.length - 1] = Infinity; // a sentinel value
+        leftArr[leftArr.length - 1] = Infinity; // a sentinel value
         var m = 0;
         var n = 0;
         for (var k = startLeft; k < stopRight; ++k) {
@@ -191,6 +212,35 @@ function CArray(numElements) {
         }
         console.log("left array - ", leftArr);
         console.log("right array - ", rightArr);
+    }
+
+
+    //这是一个精简版
+    //这个函数是合（把两个排序好的数组进行合并），关键方法是这个
+    function merge(left, right) {
+        //把左右的数组归并到一个
+        var result = [];
+        while (left.length > 0 && right.length > 0) {
+            if (left[0] < right[0]) {
+                /*shift()方法用于把数组的第一个元素从其中删除，并返回第一个元素的值。*/
+                result.push(left.shift());
+            } else {
+                result.push(right.shift());
+            }
+        }
+        //很像快速排序
+        return result.concat(left).concat(right);
+    }
+
+    //这个函数是分，分为左右两个
+    function mergeSort2(items) {
+        if (items.length == 1) {
+            return items;
+        }
+        var middle = Math.floor(items.length / 2);
+        var left = items.slice(0, middle);
+        var right = items.slice(middle);
+        return merge(mergeSort2(left), mergeSort2(right));
     }
 
 

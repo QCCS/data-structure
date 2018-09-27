@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+    arr = [2, 3, 88888, 7, 4, 399, 22]
+    //快速排序，递归的思想
+    //选择一个数作为基准，分成左右两部分，分别排序，对左右两部分再次循环
+    function test0(arr) {
+        var arr = arr;
+        if (arr.length == 0) {
+            return [];
+        }
+        var left = [];
+        var right = [];
+        var pivot = arr[0];
+        for (var i = 1; i < arr.length; i++) {
+            if (arr[i] < pivot) {
+                left.push(arr[i]);
+            } else {
+                right.push(arr[i]);
+            }
+        }
+        //最后是连接左边中间右边（递归连接）
+        return test0(left).concat(pivot, test0(right));
+    }
+
+
+    function test1(arr) {
+        if (arr.length <= 1) {
+            return arr;
+        }
+        var middle = arr[0], left = [], right = [];
+        for (var i = 1; i < arr.length; i++) {
+            if (arr[i] < middle) {
+                left.push(arr[i]);
+            } else {
+                right.push(arr[i]);
+            }
+        }
+        return test1(left).concat(middle, test1(right));
+    }
+
+//    console.log(test(arr))
+    //console.log(test1(arr))
+
+
+    //这是一个精简版
+    //这个函数是合（把两个排序好的数组进行合并），关键方法是这个
+    function merge(left, right) {
+        //把左右的数组归并到一个
+        var result = [];
+        while (left.length > 0 && right.length > 0) {
+            if (left[0] < right[0]) {
+                /*shift()方法用于把数组的第一个元素从其中删除，并返回第一个元素的值。*/
+                result.push(left.shift());
+            } else {
+                result.push(right.shift());
+            }
+        }
+        //很像快速排序
+        return result.concat(left).concat(right);
+    }
+
+    function concatSort(a,b){
+        var arr = a.concat(b).sort(function(x,y){
+            return x-y;
+        })
+        return arr;
+    }
+    //这个函数是分，分为左右两个
+    function mergeSort2(items) {
+        if (items.length == 1) {
+            return items;
+        }
+        var middle = Math.floor(items.length / 2);
+        var left = items.slice(0, middle);
+        var right = items.slice(middle);
+        return concatSort(mergeSort2(left), mergeSort2(right));
+        return merge(mergeSort2(left), mergeSort2(right));
+    }
+    console.log(mergeSort2(arr))
+</script>
+
+</body>
+</html>

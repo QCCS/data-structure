@@ -10,6 +10,7 @@
 </html>
 
 <script>
+    'use strict'
 
     function bar() {
         var foo;
@@ -28,6 +29,7 @@
         function foo() {}
         foo = 11;
     }
+    console.log(bar2());
     console.log(typeof bar2());
 
     function bar3() {
@@ -127,6 +129,7 @@
     // 也就是说a=2的f函数被覆盖了
     //这里也说明了一个问题,就是把最外层的函数看着是一个闭包是有问题的,
     //因为在最外层受到浏览器解析的影响
+
 
 
     //变量在一个作用域提升，并不是在全局进行提升
