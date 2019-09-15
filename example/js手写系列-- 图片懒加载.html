@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        img {
+            display: inline-block;
+            width: 100%;
+            height: 300px;
+            background: gray;
+        }
+    </style>
+</head>
+
+<body>
+<div class="box-image">
+    <img src="" class="image-item" lazyload="true" data-original="https://img.alicdn.com/imgextra/i2/252339290/TB29PYUXnIlyKJjSZFrXXXn2VXa_!!252339290-0-beehive-scenes.jpg_180x180xzq90.jpg_.webp" alt="">
+    <img src="" class="image-item" lazyload="true" data-original="https://img.alicdn.com/imgextra/i4/2260152888/O1CN01vw2e251XCkJr0VPZU_!!2260152888-0-beehive-scenes.jpg_250x250xz.jpg" alt="">
+    <img src="" class="image-item" lazyload="true" data-original="https://img.alicdn.com/imgextra/i3/24687421/TB2Xg1izsyYBuNkSnfoXXcWgVXa_!!24687421-0-beehive-scenes.jpg_250x250xz.jpg" alt="">
+    <img src="" class="image-item" lazyload="true" data-original="https://img.alicdn.com/imgextra/i4/890151842/TB2II1mnZbI8KJjy1zdXXbe1VXa_!!890151842-0-beehive-scenes.jpg_250x250xz.jpg" alt="">
+    <img src="" class="image-item" lazyload="true" data-original="https://img.alicdn.com/imgextra/i2/2096513830/TB2l1W0kRnTBKNjSZPfXXbf1XXa_!!2096513830-0-beehive-scenes.jpg_250x250xz.jpg" alt="">
+    <img src="" class="image-item" lazyload="true" data-original="https://img.alicdn.com/imgextra/i3/2586222636/TB2RDGrpqAoBKNjSZSyXXaHAVXa_!!2586222636-0-daren.jpg_250x250xz.jpg" alt="">
+    <img src="" class="image-item" lazyload="true" data-original="https://img.alicdn.com/imgextra/i2/1870112525/TB2Ae.xbOwIL1JjSZFsXXcXFFXa_!!1870112525-2-beehive-scenes.png_250x250xz.jpg" alt="">
+    <img src="" class="image-item" lazyload="true" data-original="https://img.alicdn.com/imgextra/i2/2194952831/TB2PwWty7qvpuFjSZFhXXaOgXXa_!!2194952831-0-beehive-scenes.jpg_250x250xz.jpg" alt="">
+</div>
+<script>
+
+    //方式一
+    //1.先加载 10 张，所有图片高度 1000 px
+    //2.滚动高度> 1000px 继续加载10张，所有图片高度 2000px
+    //循环 2
+    //方式二
+    //判断图片容器，getBoundingClientRect，底部大于 0，且顶部 < clientHeight 屏幕高度
+    var viewHeight = document.documentElement.clientHeight;
+
+    function lazyload() {
+        var imgs = document.querySelectorAll('img[data-original][lazyload]');
+        imgs.forEach(item => {
+            if (item.dataset.original === '') {
+                return;
+            }
+            var rect = item.getBoundingClientRect();
+            if (rect.bottom >= 0 && rect.top < viewHeight) {
+                var img = new Image();
+                img.src = item.dataset.original;
+                img.onload = function() {
+                    item.src = img.src;
+                    console.log(img.height)
+                };
+                item.removeAttribute('data-original');
+                item.removeAttribute('lazyload');
+            }
+        })
+    }
+    lazyload();
+    document.addEventListener('scroll', lazyload);
+
+
+
+
+    //    防抖
+    var mydiv = document.getElementById("scroll");
+    function handleScroll() {//判断是否滚动到底了
+        console.log('mydiv.scrollTop', mydiv.scrollTop);
+        console.log('mydiv.scrollHeight', mydiv.scrollHeight);
+        console.log('mydiv.clientHeight', mydiv.clientHeight);
+        if (mydiv.scrollTop >= mydiv.scrollHeight - mydiv.clientHeight) {
+            console.log('bottom');
+        }
+    }
+    function debounce(func,delay) {//防抖or节流函数
+        var timer=null;
+        return function(){
+            let context=this;
+            let args=arguments;
+            // if(!timer){//防抖需要加timer是否存在的判断
+            clearTimeout(timer);//节流就直接clear掉timer重新生成
+            timer=setTimeout(function(){
+                func.apply(context,args);
+                //timer=null;
+            },delay)
+            // }
+        }
+    }
+    mydiv.onscroll=debounce(handleScroll,1000);
+</script>
+</body>
+
+</html>

@@ -94,7 +94,6 @@
         return function () {
             return that.apply(context);
         }
-
     }
     //但是绑定的函数没有参数
     // 第2版
@@ -107,7 +106,6 @@
             var bindArgs = Array.prototype.slice.call(arguments);
             return that.apply(context,args.concat(bindArgs));
         }
-
     }
     // 上面的有缺陷也就是说当 bind 返回的函数作为构造函数的时候，bind 时指定的 this 值会失效，但传入的参数依然生效。
 

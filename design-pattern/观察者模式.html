@@ -1,106 +1,108 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title></title>
-	</head>
-	<body>
-	 <input id="pub1_"  type="button" value="b1"/> 
-	 <input id="text1_" /><br>
-	 	
-	 <input  id="pub2_" type="button" value="b2" /> 
-	 <input  id="text2_"/><br>
-	 	
-	  <input id="pub3_" type="button" value="b3"/> 
-	 <input  id="text3_"/><br>
-	 	上面是两个是发布者
-	 	<br>
-	 		
-	 下面是两个读者，第一个读者只订阅了b1,b2，第二个读者订阅b1,b2,b3
-	 <textarea id="sub1_"></textarea>
-	 <textarea id="sub2_"></textarea>
- 
-	</body>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+<input id="pub1_" type="button" value="b1"/>
+<input id="text1_"/><br>
+
+<input id="pub2_" type="button" value="b2"/>
+<input id="text2_"/><br>
+
+<input id="pub3_" type="button" value="b3"/>
+<input id="text3_"/><br>
+上面是两个是发布者
+<br>
+
+下面是两个读者，第一个读者只订阅了b1,b2，第二个读者订阅b1,b2,b3
+<textarea id="sub1_"></textarea>
+<textarea id="sub2_"></textarea>
+
+</body>
 </html>
 <script>
 
-//观察者模式
-//对程序中的某一个对象进行实时观察，当对象状态发生改变的时候，进行通知
 
-//案例，订报纸
-//报社
-var Publish=function(name){
-	this.name=name;
-	this.subscribers=[];//订阅者，数组元素为函数
-}
- 
-//发布消息的方法
-Publish.prototype.deliver=function(news){
-	var publish=this;//当前报社本身
-	this.subscribers.forEach(function(fn){
-		//forEach()是一个h5的新特性，回调函数三个参数，(元素，序号，数组),这里的元素item是函数
-		fn(news,publish);//把新消息发给订阅者
-	})
-	return this;//方便链式编程
-}
 
-//具体订阅者订阅报纸的方法
-Function.prototype.subscribe=function(publish){
-	
-	var sub=this;//取到这个订阅者
-	var alreadyExists=publish.subscribers.some(function(item){
+    //观察者模式
+    //对程序中的某一个对象进行实时观察，当对象状态发生改变的时候，进行通知
+
+    //案例，订报纸
+    //报社
+    var Publish = function (name) {
+        this.name = name;
+        this.subscribers = [];//订阅者，数组元素为函数
+    }
+
+    //发布消息的方法
+    Publish.prototype.deliver = function (news) {
+        var publish = this;//当前报社本身
+        this.subscribers.forEach(function (fn) {
+            //forEach()是一个h5的新特性，回调函数三个参数，(元素，序号，数组),这里的元素item是函数
+            fn(news, publish);//把新消息发给订阅者
+        })
+        return this;//方便链式编程
+    }
+
+    //具体订阅者订阅报纸的方法
+    Function.prototype.subscribe = function (publish) {
+
+        var sub = this;//取到这个订阅者
+        var alreadyExists = publish.subscribers.some(function (item) {
 //		if(item===sub){//如果有这个订阅者
 //			return true;
 //		}else{
 //			return false;
 //		}
 //上面三句可以修改为非常经典的一行；
-		return item===sub;
-	});//some,循环检测每一个元素，有一个通过，全部通过true，否则不通过false
-	
-	if(!alreadyExists){//如果没有这个订阅者,加入其中
-		publish.subscribers.push(this);
-	}
-	return this;//方便链式编程
-}
+            return item === sub;
+        });//some,循环检测每一个元素，有一个通过，全部通过true，否则不通过false
 
-//具体订阅者取消订阅
+        if (!alreadyExists) {//如果没有这个订阅者,加入其中
+            publish.subscribers.push(this);
+        }
+        return this;//方便链式编程
+    }
 
-Function.prototype.unsubscribe=function(publish){
-	var sub=this;//qu
-	//filter循环执行函数，如果不匹配，就删除这个元素
-	Publish.subscribers=Publish.subscribers.filter(function(item){
-		return item!==sub;//如果不匹配，就删除，最后返回一个新的数组，已经去掉不需要的
-	});
-	return this;//方便链式编程
-}
+    //具体订阅者取消订阅
 
-//实例发布对象
-var pub1=new Publish("第1报社");
-var pub2=new Publish("第2报社");
-var pub3=new Publish("第3报社");
- 
-//观察者-函数
-var sub1=function(news){
-	sub1_.innerHTML=arguments[1].name+":"+news+"\n";
-};
-var sub2=function(news){
-	sub2_.innerHTML=arguments[1].name+":"+news+"\n";
-};
-//订阅者订阅
-sub1.subscribe(pub1).subscribe(pub2);//订阅两家
-sub2.subscribe(pub1).subscribe(pub2).subscribe(pub3);//订阅三家
-//事件的绑定
- 
-pub1_.onclick=function(){
-	pub1.deliver(text1_.value);
-}
-pub2_.onclick=function(){
-	pub2.deliver(text2_.value);
-}
-pub3_.onclick=function(){
-	pub3.deliver(text3_.value);
-}
+    Function.prototype.unsubscribe = function (publish) {
+        var sub = this;//qu
+        //filter循环执行函数，如果不匹配，就删除这个元素
+        Publish.subscribers = Publish.subscribers.filter(function (item) {
+            return item !== sub;//如果不匹配，就删除，最后返回一个新的数组，已经去掉不需要的
+        });
+        return this;//方便链式编程
+    }
+
+    //实例发布对象
+    var pub1 = new Publish("第1报社");
+    var pub2 = new Publish("第2报社");
+    var pub3 = new Publish("第3报社");
+
+    //观察者-函数
+    var sub1 = function (news) {
+        sub1_.innerHTML = arguments[1].name + ":" + news + "\n";
+    };
+    var sub2 = function (news) {
+        sub2_.innerHTML = arguments[1].name + ":" + news + "\n";
+    };
+    //订阅者订阅
+    sub1.subscribe(pub1).subscribe(pub2);//订阅两家
+    sub2.subscribe(pub1).subscribe(pub2).subscribe(pub3);//订阅三家
+    //事件的绑定
+
+    pub1_.onclick = function () {
+        pub1.deliver(text1_.value);
+    }
+    pub2_.onclick = function () {
+        pub2.deliver(text2_.value);
+    }
+    pub3_.onclick = function () {
+        pub3.deliver(text3_.value);
+    }
 </script>
 
 

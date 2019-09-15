@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="selfrequire.js"></script>
+<script>
+    //必须在当前目录定义
+    require.register("./foo.js", function (module, exports, require) {
+        module.exports = function (x) {
+            console.log(x);
+        };
+    });
+    //无法异步加载
+    var foo = require("./foo.js");
+    foo("Hi");
+
+</script>
+</body>
+</html>

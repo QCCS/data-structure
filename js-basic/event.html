@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #test{
+            width: 100px;
+            height: 200px;
+            background: darkcyan;
+        }
+        #test1{
+            width: 100px;
+            height: 100px;
+            background: darkblue;
+        }
+    </style>
+</head>
+<body>
+<div id="test">
+    <div id="test1">inner</div>
+</div>
+</body>
+<script>
+    test1.addEventListener('click',function(event){
+        event.stopPropagation()
+        console.log(event.target.innerHTML);
+    },false)
+    //事件代理
+    test.addEventListener('click',function(event){
+        event.stopPropagation()
+        console.log(event.target.innerHTML);
+    },false)
+</script>
+</html>

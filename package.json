@@ -4,7 +4,7 @@
   "description": "data-structure",
   "main": "index.js",
   "directories": {
-    "test": "test"
+    "example": "example"
   },
   "scripts": {
     "test": "jest"
@@ -24,5 +24,8 @@
   "homepage": "https://github.com/QCCS/data-structure#readme",
   "devDependencies": {
     "jest": "^23.1.0"
+  },
+  "dependencies": {
+    "deepcopy": "^2.0.0"
   }
 }

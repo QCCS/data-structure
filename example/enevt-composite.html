@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件合成</title>
+    <style>
+        #test{
+            width: 100px;
+            height: 100px;
+            background: darkcyan;
+            position: absolute;
+        }
+        #test2{
+            width: 110px;
+            height: 100px;
+            background: darkcyan;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<div id="test2">事件合成</div>
+
+<div id="test">事件合成</div>
+</body>
+
+
+<script>
+    var testTouchstart = testMousedown;
+    var testTouchmove = testMousemove;
+    var testTouchend = testMouseup;
+    // test.addEventListener('click',testClick);
+    test.addEventListener('mousedown',testMousedown);
+    test.addEventListener('touchstart',testTouchstart);
+    function testMousemove(e) {
+        console.log(e);
+        if(e.type === 'mousemove'){
+            test.style.left = e.clientX-20+"px";
+            test.style.top = e.clientY-20+"px";
+        }
+        if(e.type === 'touchmove'){
+            let eT = e.changedTouches[0];
+            test.style.left = eT.clientX-20+"px";
+            test.style.top = eT.clientY-20+"px";
+        }
+    }
+    function testMouseup(e) {
+        console.log(e);
+        test.removeEventListener('mousemove',testMousemove);
+        test.removeEventListener('touchmove',testTouchmove);
+    }
+    function testMousedown(e) {
+        console.log(e);
+        if(e.type === 'touchstart'){
+            test.addEventListener('touchmove',testTouchmove);
+            test.addEventListener('touchend',testTouchend);
+        }
+        if(e.type === "mousedown"){
+            test.addEventListener('mousemove',testMousemove);
+            test.addEventListener('mouseup',testMouseup);
+        }
+    }
+
+
+    //点击事件 pc端
+    function testClick(e) {
+        console.log(e);
+        console.log("click");
+    }
+    //点击事件 移动端
+    function tap() {
+
+    }
+
+    /*
+    * 给 obj 添加事件
+    * 兼容 pc 端与移动端
+    * */
+    function addEvent(obj,type,handler) {
+        if(type==="click"){
+            obj.addEventListener('click', function (e) {
+                handler(e)
+            });
+            obj.addEventListener("touchend", function (e) {
+                handler(e)
+            });
+        }
+    }
+
+    addEvent(test2,'click',function (e) {
+        console.log(e)
+    })
+
+
+
+
+</script>
+</html>

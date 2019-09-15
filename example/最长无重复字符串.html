@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>onwheel-test</title>
+    <style>
+        body {
+            height: 3000px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    function getMaxStr(s) {
+        if (Object.prototype.toString.call(s) === "[object String]") {
+            if (s.length < 2) {
+                return s.length;
+            }
+            let map = {};
+            let len = s.length;
+            let maxLen = 0;//最长长度
+            let max = 0;//游标
+            for (let i = 0; i < len; i++) {
+                if (map[s[i]]) {
+                    if (maxLen < max) {
+                        maxLen = max
+                    }
+                    max = 1;
+                } else {
+                    console.log("++")
+                    console.log(s[i])
+                    map[s[i]] = true;
+                    max++
+                }
+            }
+            console.log(maxLen);
+            console.log(max);
+            if (maxLen < max) {
+                maxLen = max
+            }
+            return maxLen;
+        } else {
+            return "不是字符串";
+        }
+    }
+
+    let s = {};
+    console.log(getMaxStr(s))
+</script>
+</body>
+</html>
+

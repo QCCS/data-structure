@@ -1,215 +1,227 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title></title>
-	</head>
-	<body>
-	</body>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+</body>
 </html>
 
 <script>
-	window.onload=function(){
-		//理解js基于原型的继承
-		//先定义一个父类
-		function super_class(name){
-			this.name=name;
-		}
-		super_class.prototype={
-			constructor:super_class,
-			say_name:function(){
-				console.log(this.name);
-			}
-		}
-		var super_class1=new super_class("super");
-		     super_class1.say_name();
-		//定义一个子类
-		function child_class(age){
-			this.age=age;
-		}
-	 
-		//父类的整个实例给子类的原型，
-		child_class.prototype=new super_class("super2");
-		var child=new child_class(22);
-		child.say_name();
-		//这种方式继承的比较彻底，服对象模板与父对象的原型都继承了
-		//这种继承理解起来比较乱，比如名字从父类传入，在子类显示，貌似子类与父类杂在一起，没有分离
-		//=============================================================
-		
-		//采用call实现继承
-		function super_class11(name){
-			this.name=name;
-		}
-		super_class11.prototype={
-			constructor:super_class11,
-			say_name:function(){
-				console.log(this.name);
-			}
-			
-		}
-		function child_class11(name,age){
-			super_class11.call(this,name);
-			this.age=age;
-		}
-		var child11=new child_class11("22","zs");
-		console.log(child11.name);
-		child11.say_name;//没有继承原型，不会打印父类原型的方法
-		//因为在子类函数内部用call实现的，所以只会继承模板
-		
-		//----------------------------------------------
-		//两种方法结合使用，实现模板与对象的继承
-		
-		function super_class22(name){
-			this.name=name;
-		}
-		super_class22.prototype={
-			constructor:super_class22,
-			say_name:function(){
-				console.log(this.name);
-			}
-		}
-		function child_class22(name,age){
-			super_class22.call(this,name);//这里只实习模板继承
-			this.age=age;
-		}
-		 child_class22.prototype=new child_class22();
-		 //这里实现原型继承，实例的时候，不用传参数，虽然继承模板，但是是空模板？这是一个问题，如果模板里面的属性很多，效率变低
-		 var child_class222=new child_class22("22222222222222222","zs222222222222");
-		 console.log(child_class222.name);
-		 child_class222.say_name;
-		 //--------------------------------------------------------------------------------
-		 
-		 //上面的方法继承了两次模板，一次原型
-		 //只继承一次原型，一次模板
-		 //继承类
-		
-		   //原理，把父类的原型先赋给一个空对象，再把这个空对象的原型给子类。
-		   //由于有了上面的操作，子类的构造器会改变，于是要还原子类的构造器
-		  function extend_prototype(child,parent){
-				  var F = new Function();
-					F.prototype=parent.prototype;
-					child.prototype=new F();//目的达到了
-					child.prototype.constructor=child;
-				
-					child.superClass=parent.prototype;//自定义一个子类的哦静态属性,方便解耦
-					//上面这句代码，保存父类的原型，这个非常有用，因为这样，我们利用sub.superClass.constructor
-					//可以随时访问父类里面的私有属性
-					if(parent.prototype.constructor==Object.prototype.constructor){
-						parent.prototype.constructor=parent;//还原构造器
-					}//这个地方是为了防止在给对象原型时没有还原构造器而产生空对象出现错误
-					
-		 }
-		 
-		 
-		 //==============================================================
-		 
-		 //有了继承函数
-		function p(name){
-			this.name=name;
-		}
-		p.prototype={
-			constructor:p,//一定要还原对象的构造器，不然是空对象；因为随时会用到父类的构造器
-			say_name:function(){
-				console.log(this.name);
-			}
-		}
- 
-		function c(name,age){
-			//p.call(this,name);//这里只实现模板继承
-			//上面的写法增加子类与父类的耦合性,由于在entexd函数最后一句，把父类的构造器保存在子类属性里了，于是
-			c.superClass.constructor.call(this,name);//这样就解耦
-			this.age=age;
-		}
-		 extend_prototype(c,p)//这里继承 原型
-		 var c1=new c("333333333333333333","3aaaaaaaaaaaaaaa");
-		 console.log(c1.name);
-		 c1.say_name;
-		 
-		 
-		 //=============================================================
-		 //继承还有其他方式，原理就是这样
-		 //比如把call改为apply（obj,[]）,
-		 //对象冒充等，把对象里面定义一个变量，等于父类对象实例，就可以使用父类的属性
-		 
-		 //实现对象的继承的原理：
-		 //1.每个对象都有自己的属性（静态与非静态），方法（静态与非静态），与原型。
-		 //2.原型也相当于一个对象，只是每个一般对象都有这个对象属性。而且这个对象的构造器指向对象本身。
-		 //3.静态属性，静态方法，类似私有变量，不能被继承。
-		 //4.继承就是要实现，一个子对象（另一个对象）可以使用，或者共用父类对象（另一个对象）的方法与属性。
-		 //而且父类并不会用到子类的属性。
-		 
-		 //=================================================================
+    window.onload = function () {
+        //理解js基于原型的继承
+        //先定义一个父类
+        function super_class(name) {
+            this.name = name;
+        }
 
-		 
-		 //下面理解那些属性与方法能被继承
-	 	//这里有三个对象，a,b，c;
-		function A(){
-				//a中的公共属性与公共方法
-				this.name="我的对象A";
-				this.mothed=function(){
-				console.log("我是对象a中方法");	
-		    };
-			//在对象内部添加私有方法静态属性
-			var staticName = "aa";//这个是私有属性，外部是不能直接访问的
-			function innerA(){//
-				console.log("我是a内部的方法");
-			};
-			innerA();
-			//上面的私有方法与私有属性外部无法访问，下面定义一个特权方法来访问
-			this.spec=function(){
-			 	console.log(staticName);
-			}
-		};
-	    var A1=new A();//实例化的时候，同时运行对象里面的静态方法
-		   //通过实例给A添加静态方法与静态属性
-	    A1.address="上海";
-	    A1.mothed2=function(){
-	    	console.log("我是a对象外部的静态方法");
-	    }
+        super_class.prototype = {
+            constructor: super_class,
+            say_name: function () {
+                console.log(this.name);
+            }
+        }
+        var super_class1 = new super_class("super");
+        super_class1.say_name();
 
-	    A1.mothed();
-	    A1.mothed2();
-	    A1.spec();
-	    console.log("A中的静态方法"+A1.constructor.innerA );
-		//现在B什么属性与方法也没有，通过原型继承a
-		function B(){
-			this.name="qasa";
-			this.mothed3=function(){
-				console.log("我是B中的方法，等着被C继承")
-				console.log(this.age);//能访问到原型上的属性
-			}
-				function innerB(){//
-				console.log("我是B内部的方法,想访问age"+this.age);//这是无法访问的
-			};
-			innerB();
-		};
-	 	B.prototype=new A();//把A的方法与属性全部给B了，B继承了A;
-		B.prototype.age="201111";
-		B.prototype.mathed4=function(){//通过原型继承的，看似是静态方法，但是可以被继承，也可以直接
-			//访问
-			console.log("能访问B中的公共属性吗"+name);
-			console.log("我是b中的方法，而且是通过原型赋予的")
-		}
-		var B1=new B();//实例一个B对象；在实例化对象b对象的时候，A中的静态方法inner中并没有执行
-		console.log("开始运行B了")
-		B1.staticM=function(){
-			console.log(this.age)
-		}
-		//B1.mothed();//这是A中的方法，可以用了，属性也可以
-		//B1.mathed4();//这是a的实例对象方法，也不能继承
-		 B1.staticM();
+        //定义一个子类
+        function child_class(age) {
+            this.age = age;
+        }
 
-		//现在c中方法与属性也没有，下面来继承B
-		function C(){
-			
-		};
-		C.prototype=new B();//这样C把A与B中属性与方法都继承了，
-		var C1=new C();
-		console.log("开始运行C对象了")
-		C1.mothed3();
-		C1.mothed();
-		C1.mathed4();
-		//继承出去了，静态方法与静态属性，还有实例中添加的属性与方法
-	}
-	
+        //父类的整个实例给子类的原型，
+        child_class.prototype = new super_class("super2");
+        var child = new child_class(22);
+        child.say_name();
+        //这种方式继承的比较彻底，服对象模板与父对象的原型都继承了
+        //这种继承理解起来比较乱，比如名字从父类传入，在子类显示，貌似子类与父类杂在一起，没有分离
+        //=============================================================
+
+        //采用call实现继承
+        function super_class11(name) {
+            this.name = name;
+        }
+
+        super_class11.prototype = {
+            constructor: super_class11,
+            say_name: function () {
+                console.log(this.name);
+            }
+
+        }
+
+        function child_class11(name, age) {
+            super_class11.call(this, name);
+            this.age = age;
+        }
+
+        var child11 = new child_class11("22", "zs");
+        console.log(child11.name);
+        child11.say_name;//没有继承原型，不会打印父类原型的方法
+        //因为在子类函数内部用call实现的，所以只会继承模板
+
+        //----------------------------------------------
+        //两种方法结合使用，实现模板与对象的继承
+
+        function super_class22(name) {
+            this.name = name;
+        }
+
+        super_class22.prototype = {
+            constructor: super_class22,
+            say_name: function () {
+                console.log(this.name);
+            }
+        }
+
+        function child_class22(name, age) {
+            super_class22.call(this, name);//这里只实习模板继承
+            this.age = age;
+        }
+
+        child_class22.prototype = new child_class22();
+        //这里实现原型继承，实例的时候，不用传参数，虽然继承模板，但是是空模板？这是一个问题，如果模板里面的属性很多，效率变低
+        var child_class222 = new child_class22("22222222222222222", "zs222222222222");
+        console.log(child_class222.name);
+        child_class222.say_name;
+        //--------------------------------------------------------------------------------
+
+        //上面的方法继承了两次模板，一次原型
+        //只继承一次原型，一次模板
+        //继承类
+
+        //原理，把父类的原型先赋给一个空对象的原型，再把这个空对象的原型给子类。
+        //由于有了上面的操作，子类的构造器会改变，于是要还原子类的构造器
+        function extend_prototype(child, parent) {
+            var F = new Function();
+            F.prototype = parent.prototype;
+            child.prototype = new F();//目的达到了
+            child.prototype.constructor = child;
+
+            child.superClass = parent.prototype;//自定义一个子类的哦静态属性,方便解耦
+            //上面这句代码，保存父类的原型，这个非常有用，因为这样，我们利用sub.superClass.constructor
+            //可以随时访问父类里面的私有属性
+            if (parent.prototype.constructor == Object.prototype.constructor) {
+                parent.prototype.constructor = parent;//还原构造器
+            }//这个地方是为了防止在给对象原型时没有还原构造器而产生空对象出现错误
+
+        }
+
+
+        //==============================================================
+
+        //有了继承函数
+        function p(name) {
+            this.name = name;
+        }
+
+        p.prototype = {
+            constructor: p,//一定要还原对象的构造器，不然是空对象；因为随时会用到父类的构造器
+            say_name: function () {
+                console.log(this.name);
+            }
+        }
+
+        function c(name, age) {
+            //p.call(this,name);//这里只实现模板继承
+            //上面的写法增加子类与父类的耦合性,由于在entexd函数最后一句，把父类的构造器保存在子类属性里了，于是
+            c.superClass.constructor.call(this, name);//这样就解耦
+            this.age = age;
+        }
+
+        extend_prototype(c, p)//这里继承 原型
+        var c1 = new c("333333333333333333", "3aaaaaaaaaaaaaaa");
+        console.log(c1.name);
+        c1.say_name;
+
+
+        //=============================================================
+        //继承还有其他方式，原理就是这样
+        //比如把call改为apply（obj,[]）,
+        //对象冒充等，把对象里面定义一个变量，等于父类对象实例，就可以使用父类的属性
+
+        //实现对象的继承的原理：
+        //1.每个对象都有自己的属性（静态与非静态），方法（静态与非静态），与原型。
+        //2.原型也相当于一个对象，只是每个一般对象都有这个对象属性。而且这个对象的构造器指向对象本身。
+        //3.静态属性，静态方法，类似私有变量，不能被继承。
+        //4.继承就是要实现，一个子对象（另一个对象）可以使用，或者共用父类对象（另一个对象）的方法与属性。
+        //而且父类并不会用到子类的属性。
+
+        //=================================================================
+
+
+        //下面理解那些属性与方法能被继承
+        //这里有三个对象，a,b，c;
+        function A() {
+            //a中的公共属性与公共方法
+            this.name = "我的对象A";
+            this.mothed = function () {
+                console.log("我是对象a中方法");
+            };
+            //在对象内部添加私有方法静态属性
+            var staticName = "aa";//这个是私有属性，外部是不能直接访问的
+            function innerA() {//
+                console.log("我是a内部的方法");
+            };
+            innerA();
+            //上面的私有方法与私有属性外部无法访问，下面定义一个特权方法来访问
+            this.spec = function () {
+                console.log(staticName);
+            }
+        };
+        var A1 = new A();//实例化的时候，同时运行对象里面的静态方法
+        //通过实例给A添加静态方法与静态属性
+        A1.address = "上海";
+        A1.mothed2 = function () {
+            console.log("我是a对象外部的静态方法");
+        }
+
+        A1.mothed();
+        A1.mothed2();
+        A1.spec();
+        console.log("A中的静态方法" + A1.constructor.innerA);
+
+        //现在B什么属性与方法也没有，通过原型继承a
+        function B() {
+            this.name = "qasa";
+            this.mothed3 = function () {
+                console.log("我是B中的方法，等着被C继承")
+                console.log(this.age);//能访问到原型上的属性
+            }
+
+            function innerB() {//
+                console.log("我是B内部的方法,想访问age" + this.age);//这是无法访问的
+            };
+            innerB();
+        };
+        B.prototype = new A();//把A的方法与属性全部给B了，B继承了A;
+        B.prototype.age = "201111";
+        B.prototype.mathed4 = function () {//通过原型继承的，看似是静态方法，但是可以被继承，也可以直接
+            //访问
+            console.log("能访问B中的公共属性吗" + name);
+            console.log("我是b中的方法，而且是通过原型赋予的")
+        }
+        var B1 = new B();//实例一个B对象；在实例化对象b对象的时候，A中的静态方法inner中并没有执行
+        console.log("开始运行B了")
+        B1.staticM = function () {
+            console.log(this.age)
+        }
+        //B1.mothed();//这是A中的方法，可以用了，属性也可以
+        //B1.mathed4();//这是a的实例对象方法，也不能继承
+        B1.staticM();
+
+        //现在c中方法与属性也没有，下面来继承B
+        function C() {
+
+        };
+        C.prototype = new B();//这样C把A与B中属性与方法都继承了，
+        var C1 = new C();
+        console.log("开始运行C对象了")
+        C1.mothed3();
+        C1.mothed();
+        C1.mathed4();
+        //继承出去了，静态方法与静态属性，还有实例中添加的属性与方法
+    }
+
 </script>

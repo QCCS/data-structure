@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #container {
+            position: relative;
+            width: 1000px;
+            height: 1000px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+
+</div>
+</body>
+
+
+<script>
+
+    /*
+     *简略图
+     *      1
+     *   2    3
+     * 4  5
+     *      6
+     *
+     * */
+    var resData = [
+        {
+            name: "开始",
+            id: 1,
+            parentId: null,
+        },
+        {
+            name: "节点2",
+            id: 2,
+            parentId: 1,
+        },
+        {
+            name: "节点3",
+            id: 3,
+            parentId: 1,
+        },
+        {
+            name: "节点7",
+            id: 7,
+            parentId: 1,
+        },
+        {
+            name: "节点4",
+            id: 4,
+            parentId: 2,
+        },
+        {
+            name: "节点5",
+            id: 5,
+            parentId: 2,
+        },
+        {
+            name: "节点6-结束1",
+            id: 6,
+            parentId: 3,
+        },
+        {
+            name: "节点6-结束2",
+            id: 6,
+            parentId: 7,
+        },
+        {
+            name: "节点6-结束3结束3",
+            id: 6,
+            parentId: 3,
+        },
+        //
+        {
+            name: "节点8",
+            id: 8,
+            parentId: 7,
+        },
+        {
+            name: "节点9",
+            id: 9,
+            parentId: 7,
+        },
+        {
+            name: "节点10",
+            id: 10,
+            parentId: 7,
+        },
+        {
+            name: "节点11",
+            id: 11,
+            parentId: 2,
+        },
+        {
+            name: "节点12",
+            id: 12,
+            parentId: 8,
+        },
+        {
+            name: "节点13",
+            id: 13,
+            parentId: 9,
+        },
+        {
+            name: "节点14",
+            id: 14,
+            parentId: 10,
+        },
+    ];
+
+    function Node(node) {
+        this.nodeWith = 90;
+        var div = document.createElement("div");
+        div.style.background = 'gray';
+        div.style.width = this.nodeWith + 'px';
+        div.style.height = this.nodeWith + 'px';
+        div.style.position = "absolute";
+        div.style.left = node.x + "px";
+        div.style.top = node.y + 'px';
+        div.innerHTML = node.name;
+        return div;
+    }
+
+    function Graph(container, resData) {
+        this.nodes = [];
+        this.willInsertNode = [];
+        this.container = container;
+        //添加节点
+        this.add = function (node) {
+            if (node.parentId) {
+                //非顶级节点
+                var parentNode = this.deepTravelGetParentNode(this.nodes, node.parentId);
+                if (parentNode) {
+                    var child = node;
+                    child.y = parentNode.y + 100;
+                    //找到父节点了
+                    if (parentNode.children) {
+                        parentNode.children.push(child);
+                        this.mergePostionParent(parentNode);
+                    } else {
+                        child.x = parentNode.x;
+                        parentNode.children = [child];
+                    }
+                    return true;
+                } else {
+                    //放入待找队列
+                    this.willInsertNode.push(node);
+                    return false;
+                }
+            } else {
+                //第一个节点
+                node.x = 100;
+                node.y = 100;
+                this.nodes.push(node);
+                return true;
+            }
+        };
+
+        //修正父节点位置
+        //todo
+        this.mergePostionParent = function (parentNode) {
+            //影响了父节点，如果这个节点是其他节点的子节点，那么要继续向上寻找修正 递归
+            if (parentNode.parentId) {
+                //parentNode 的 父节点
+                let ppNode = this.deepTravelGetParentNode(this.nodes, parentNode.parentId);
+                let allLeftPP = 0;
+                let firstLeftPP = parentNode.children[0].x || 100;
+                ppNode.children.map((pNode, outterIndex) => {
+                    pNode.x = firstLeftPP + outterIndex * 100;
+                    allLeftPP += pNode.x;
+                    //父节点的位置，要等于父节点的所有兄弟节点的子节点来定
+                    if (pNode.children) {
+                        let allLeft = 0;
+                        let firstLeft = pNode.children[0].x || 100;
+                        console.log(firstLeft)
+                        pNode.children.map((node, index) => {
+                            node.x = firstLeft + index * 100 ;
+                            allLeft += node.x;
+                        });
+                        if (outterIndex > 0 && ppNode.children[outterIndex-1].children&&ppNode.children[outterIndex-1].children.length) {
+                            let len = ppNode.children[outterIndex-1].children.length;
+                            //这个的偏移与兄弟节点的子节点数量有关
+                            pNode.x = allLeft / pNode.children.length;
+                            pNode.x = pNode.x + len * 100;
+                        } else {
+                            //是第一个兄弟节点
+                            pNode.x = allLeft / pNode.children.length;
+                        }
+                    }
+                })
+                ppNode.x = allLeftPP / ppNode.children.length;
+                this.mergePostionParent(ppNode)
+            } else {
+                let allLeft = 0;
+                //第一个子节点的偏移
+                let firstLeft = parentNode.children[0].x || 100;
+                //父节点没有父节点，此时 父节点的位置 只由父节点的子节点位置控制
+                parentNode.children.map((node, index) => {
+                    node.x = firstLeft + index * 100;
+                    if(index > 0 && node.children){
+                        node.x += parentNode.children[index-1].children.length*100
+                    }
+                    if(index > 0){
+                        node.x += parentNode.children[index-1].x
+                    }
+                    allLeft += node.x;
+                });
+                parentNode.x = allLeft / parentNode.children.length;
+            }
+        }
+
+        /*
+        * 是因为第一次插入节点的时候，这些节点的父节点还没有插入
+        * 处理，第一次没有被插入的节点
+        * */
+        this.insertUnInsertNode = function (nodes) {
+            while (nodes.length > 0) {
+                nodes.map((item, index) => {
+                    if (this.add(item)) {
+                        nodes.splice(index, 1)
+                    }
+                })
+            }
+        }
+        //深度遍历 寻找父节点
+        this.deepTravelGetParentNode = function (nodes, parentId) {
+            var i = 0;
+            while (i < nodes.length) {
+                if (nodes[i].id === parentId) {
+                    return nodes[i]
+                }
+                if (nodes[i].children && nodes[i].children.length > 0) {
+                    var targetNode = this.deepTravelGetParentNode(nodes[i].children, parentId);
+                    if (targetNode) {
+                        return targetNode
+                    }
+                }
+                i++
+            }
+        }
+        //把节点遍历处理，进行绘制
+        this.getCanDraw = function (nodes) {
+            var i = 0;
+            var res = [];
+            while (i < nodes.length) {
+                res.push(nodes[i]);
+                if (nodes[i].children) {
+                    let children = nodes[i].children;
+                    res = res.concat(this.getCanDraw(children))
+                }
+                i++
+            }
+
+            return res;
+        }
+        //绘制节点
+        this.drawNode = function (node) {
+            this.container.appendChild(new Node(node))
+        }
+        //初始化图
+        this.init = function () {
+            //把节点装载到图对象
+            resData.map(item => {
+                this.add(item);
+            })
+            this.insertUnInsertNode(this.willInsertNode);
+        }
+        this.init()
+
+    }
+
+    var container = document.getElementById('container')
+    var graph = new Graph(container, resData);
+    // 绘制
+    listCanDraw = graph.getCanDraw(graph.nodes);
+    console.log(graph)
+    console.log(listCanDraw)
+    listCanDraw.map(item => {
+        graph.drawNode(item)
+    })
+</script>
+</html>
